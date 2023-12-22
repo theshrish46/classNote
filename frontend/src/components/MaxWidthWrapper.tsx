@@ -3,7 +3,7 @@ import React from "react";
 
 type TProps = {
   children: React.ReactNode;
-  className: string;
+  className?: string;
 };
 
 const MaxWidthWrapper = ({ children, className }: TProps) => {

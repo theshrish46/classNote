@@ -4,7 +4,7 @@ import Editor from "@/components/Editor";
 const page = () => {
   return (
     <>
-      <MaxWidthWrapper className="border-2 border-gray-400 w-full">
+      <MaxWidthWrapper className="w-full">
         <Editor />
       </MaxWidthWrapper>
     </>
