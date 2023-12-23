@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
+import { Button } from "./ui/button";
 
 const Editor = () => {
   const modules = {
@@ -42,15 +43,22 @@ const Editor = () => {
   ];
 
   const [value, setValue] = useState("");
+  function handler() {
+    console.log(value);
+  }
+
   return (
-    <ReactQuill
-      className="my-10 border-none"
-      theme="snow"
-      formats={formats}
-      modules={modules}
-      value={value}
-      onChange={setValue}
-    />
+    <>
+      <ReactQuill
+        className="my-10 border-none"
+        theme="snow"
+        formats={formats}
+        modules={modules}
+        value={value}
+        onChange={(value) => setValue(value)}
+      />
+      <Button onClick={handler}>Submit</Button>
+    </>
   );
 };
 
