@@ -1,11 +1,18 @@
-import express from 'express';
-import mongoose from 'mongoose';
+import dotnev from "dotenv";
+import { app } from "./app.js";
 
+import connectDB from "../db/connectDB.js";
 
-const app = express()
+dotnev.config({
+  path: "./.env",
+});
 
-
-
-app.listen(8000, () => {
-    console.log("Server running on PORT 8000");
-})
+connectDB()
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log("Server running on PORT : ", process.env.PORT);
+    });
+  })
+  .catch((error) => {
+    console.log("Something went wrong while running server : ", error);
+  });

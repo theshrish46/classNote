@@ -73,10 +73,30 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  input {
+    @apply focus:outline-none;
+  }
 }
 
 /* Quill Customization */
 
 .ql-font-roboto {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.caret-shape {
+  caret-shape: block;
+}
+
+.ql-toolbar.ql-snow {
+  border: none !important;
+}
+
+.ql-toolbar.ql-snow {
+  border: none;
+}
+
+.ql-container.ql-snow {
+  border: none;
 }
