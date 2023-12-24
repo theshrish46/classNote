@@ -1,6 +1,6 @@
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 
 const Navbar = () => {
   return (
@@ -12,7 +12,9 @@ const Navbar = () => {
           </div>
           <div className="flex justify-center items-center gap-x-4">
             <div>
-              <Button>Sign In</Button>
+              <Link href={"/register"} className={buttonVariants()}>
+                Register
+              </Link>
             </div>
             <span className="h-6 w-px bg-gray-300" aria-hidden="true"></span>
             <div>

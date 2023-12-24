@@ -1,4 +1,6 @@
 "use client";
+
+import axios from "axios";
 import {
   Form,
   FormControl,
@@ -37,6 +39,17 @@ const page = () => {
 
   async function handler(values: z.infer<typeof formObject>) {
     console.log(values);
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/auth/register",
+        values
+      );
+      const { data } = await res;
+      console.log(res);
+      console.log(data);
+    } catch (error) {
+      console.log("Error in axios", error);
+    }
   }
   return (
     <MaxWidthWrapper className="py-10">

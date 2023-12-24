@@ -12,8 +12,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
-app.use(cookieParser);
+app.use(cookieParser());
 
-app.use("/user", authRouter);
+app.use("/auth", authRouter);
 
 export { app };
