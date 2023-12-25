@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEventHandler, useState } from "react";
+import React, { use, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
@@ -8,6 +8,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { cn } from "@/lib/utils";
+import axios, { AxiosHeaders } from "axios";
 
 const Editor = () => {
   const localUser = localStorage.getItem("user");
@@ -47,11 +48,23 @@ const Editor = () => {
     "color",
     "code-block",
   ];
-
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
   const [value, setValue] = useState("");
-  function handler(e: React.FormEvent<HTMLFormElement>) {
+  const userID = user._id;
+  async function handler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(value);
+    const res = await axios.post("http://localhost:8000/blog/write", {
+      userID,
+      title,
+      category,
+      author,
+      description,
+      value,
+    });
   }
 
   return (
@@ -61,14 +74,30 @@ const Editor = () => {
         onSubmit={handler}
       >
         <Textarea
-          className="p-1 h-auto text-5xl font-semibold break-words border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200 scroll-smooth resize-none"
+          className="p-1 h-auto text-4xl font-semibold break-words border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200 scroll-smooth resize-none"
           placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
-        <Input
-          className="px-1 py-0 h-auto text-xl font-medium border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200"
-          placeholder="Author"
-          defaultValue={user.name}
-        />
+        <div className="w-full flex justify-between items-center">
+          <Input
+            className="px-1 py-0 h-auto text-xl font-medium border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200"
+            placeholder="Author"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
+          <Input
+            className="px-1 py-0 h-auto text-xl font-medium border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200"
+            placeholder="Category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+        </div>
+        <Textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="resize-none"
+        ></Textarea>
         <ReactQuill
           className={cn("border-none")}
           theme="snow"
@@ -77,7 +106,9 @@ const Editor = () => {
           value={value}
           onChange={(value) => setValue(value)}
         />
-        <Input type="submit" className={buttonVariants()} />
+        <Button type="submit" className={cn(buttonVariants(), "w-full")}>
+          Submit
+        </Button>
       </form>
     </div>
   );

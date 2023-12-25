@@ -5,6 +5,9 @@ const PostSchema = mongoose.Schema(
     title: {
       type: String,
     },
+    author: {
+      type: String,
+    },
     description: {
       type: String,
     },
