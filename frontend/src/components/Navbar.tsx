@@ -1,8 +1,11 @@
+"use client";
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { Button, buttonVariants } from "./ui/button";
 
 const Navbar = () => {
+  const localUser = localStorage.getItem("user");
+  const user = localUser ? JSON.parse(localUser) : null;
   return (
     <div className="py-8 sticky z-50 top-0 inset-x-0 h-16 bg-white">
       <header className="relative bg-white">
@@ -12,9 +15,15 @@ const Navbar = () => {
           </div>
           <div className="flex justify-center items-center gap-x-4">
             <div>
-              <Link href={"/register"} className={buttonVariants()}>
-                Register
-              </Link>
+              {user ? (
+                <div>{user.name}</div>
+              ) : (
+                <div>
+                  <Link href={"/login"} className={buttonVariants()}>
+                    Login
+                  </Link>
+                </div>
+              )}
             </div>
             <span className="h-6 w-px bg-gray-300" aria-hidden="true"></span>
             <div>

@@ -47,7 +47,6 @@ const page = () => {
         values
       );
       const { data } = await res;
-      console.log(res);
       console.log(data);
       router.push("/login");
     } catch (error) {
@@ -68,7 +67,7 @@ const page = () => {
                   <Input placeholder="name" {...field} />
                 </FormControl>
                 <FormDescription>Enter your name here!</FormDescription>
-                  <FormMessage />
+                <FormMessage />
               </FormItem>
             )}
           />

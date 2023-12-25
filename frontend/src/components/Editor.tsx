@@ -10,6 +10,8 @@ import { Textarea } from "./ui/textarea";
 import { cn } from "@/lib/utils";
 
 const Editor = () => {
+  const localUser = localStorage.getItem("user");
+  const user = localUser ? JSON.parse(localUser) : null;
   const modules = {
     toolbar: [
       [{ font: [] }],
@@ -65,6 +67,7 @@ const Editor = () => {
         <Input
           className="px-1 py-0 h-auto text-xl font-medium border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200"
           placeholder="Author"
+          defaultValue={user.name}
         />
         <ReactQuill
           className={cn("border-none")}

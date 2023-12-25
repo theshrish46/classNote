@@ -5,8 +5,8 @@ import { APIResponse } from "./../utils/APIResponse.js";
 const generateAccessAndRefreshTokens = async function (_id) {
   try {
     const user = await User.findById(_id);
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
     return { accessToken, refreshToken };
@@ -59,12 +59,17 @@ const login = async (req, res) => {
   );
 
   const options = {
-    // httpOnly: true,
-    // secure: true,
+    httpOnly: true,
+    secure: false,
+    sameSite: "None",
+    domain: "localhost:8000",
   };
-  return res
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+  // console.log(accessToken);
+
+  res
+    .cookie("testcookie", "12345")
+    .cookie("accessToken", accessToken)
+    .cookie("refreshToken", refreshToken)
     .json(
       new APIResponse(
         200,

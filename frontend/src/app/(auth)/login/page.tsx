@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 import {
   Form,
@@ -16,7 +18,6 @@ import {
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 
 const page = () => {
   const formObject = z.object({
@@ -31,13 +32,16 @@ const page = () => {
     },
   });
 
+  const router = useRouter();
   async function handler(values: z.infer<typeof formObject>) {
-    console.log(values);
     try {
       const res = await axios.post("http://localhost:8000/auth/login", values);
       const { data } = await res;
-      console.log(data);
-      console.log(res);
+      console.log(data.data);
+      localStorage.setItem("accessToken", data.data.accessToken);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
+      localStorage.setItem("user", JSON.stringify(data.data.loggedUser));
+      router.push("/");
     } catch (error) {
       console.log("Something went wrong while logging in", error);
     }
