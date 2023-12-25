@@ -2,6 +2,19 @@ import User from "./../models/User.js";
 import { APIError } from "./../utils/ApiError.js";
 import { APIResponse } from "./../utils/APIResponse.js";
 
+const generateAccessAndRefreshTokens = async function (_id) {
+  try {
+    const user = await User.findById(_id);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+    return { accessToken, refreshToken };
+  } catch (error) {
+    console.log("Something went wrong while generating tokens");
+  }
+};
+
 const register = async (req, res) => {
   const { name, email, password } = req.body;
   console.log(name, email, password);
@@ -26,12 +39,39 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  // get all the values from the req
-  // check whether all the values are present
-  // get the user details from the DB using email
-  // compare the passwords
-  // generate the accessToken and refreshToken
-  // send the both the tokens in the form of cookie response
+  const { email, password } = req.body;
+  if ([email, password].some((field) => field.trim == "")) {
+    throw new APIError(400, "All the fields are important");
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new APIError(400, "User doesn't exists");
+  }
+  const isPasswordValid = user.isPasswordCorrect(password);
+  if (!isPasswordValid) {
+    throw new APIError("Unauthorized access check your passwords");
+  }
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+    user._id,
+  );
+  const loggedUser = await User.findById(user._id).select(
+    "-password -refreshToken",
+  );
+
+  const options = {
+    // httpOnly: true,
+    // secure: true,
+  };
+  return res
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new APIResponse(
+        200,
+        { loggedUser, accessToken, refreshToken },
+        "User logged successfully",
+      ),
+    );
 };
 
 export { register, login };
