@@ -17,18 +17,18 @@ const PostSchema = mongoose.Schema(
     content: {
       type: String,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
     authorId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
     likes: {
-      type: [mongoose.Types.ObjectId],
+      type: [mongoose.Schema.Types.ObjectId],
       ref: "user",
       default: [],
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
     },
   },
   { timestamps: true },

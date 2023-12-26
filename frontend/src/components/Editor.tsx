@@ -1,14 +1,16 @@
 "use client";
-import React, { use, useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
+
 import { Button, buttonVariants } from "./ui/button";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { cn } from "@/lib/utils";
-import axios, { AxiosHeaders } from "axios";
 
 const Editor = () => {
   const localUser = localStorage.getItem("user");
@@ -23,7 +25,6 @@ const Editor = () => {
       ["blockquote", "code-block"],
       [{ list: "ordered" }, { list: "bullet" }],
       [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-      ["link", "image", "video"],
       ["clean"],
     ],
   };
@@ -54,17 +55,26 @@ const Editor = () => {
   const [description, setDescription] = useState("");
   const [value, setValue] = useState("");
   const userID = user._id;
+  const header = {
+    Authorization: localStorage.getItem("accessToken"),
+  };
+  const router = useRouter();
   async function handler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(value);
-    const res = await axios.post("http://localhost:8000/blog/write", {
-      userID,
-      title,
-      category,
-      author,
-      description,
-      value,
-    });
+    const res = await axios.post(
+      "http://localhost:8000/blog/write",
+      {
+        userID,
+        title,
+        category,
+        author,
+        description,
+        value,
+      },
+      { headers: header }
+    );
+    router.push("/");
   }
 
   return (

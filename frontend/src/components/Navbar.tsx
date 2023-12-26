@@ -2,10 +2,21 @@
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { Button, buttonVariants } from "./ui/button";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const localUser = localStorage.getItem("user");
-  const user = localUser ? JSON.parse(localUser) : null;
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    const localUser = localStorage.getItem("user");
+    const user = localUser ? JSON.parse(localUser) : null;
+    setUser(user);
+  }, []);
+
+  function handleLogout() {
+    localStorage.setItem("accessToken", "");
+    localStorage.setItem("refreshToken", "");
+    localStorage.setItem("user", "");
+  }
   return (
     <div className="py-8 sticky z-50 top-0 inset-x-0 h-16 bg-white">
       <header className="relative bg-white">
@@ -16,7 +27,7 @@ const Navbar = () => {
           <div className="flex justify-center items-center gap-x-4">
             <div>
               {user ? (
-                <div>{user.name}</div>
+                <Button onClick={handleLogout}>Logout</Button>
               ) : (
                 <div>
                   <Link href={"/login"} className={buttonVariants()}>

@@ -1,8 +1,8 @@
-import CardComponent from "@/components/CardComponent";
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Image from "next/image";
 import Link from "next/link";
 
+import CardComponent from "@/components/CardComponent";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 const blog = [
   {
     id: 1,
@@ -66,19 +66,12 @@ export default function Home() {
       <MaxWidthWrapper>
         <div className="py-20 text-center">
           <div className="flex flex-wrap justify-center items-center gap-x-5">
-            {blog.map((item, index) => (
+            {/* {blog.map((item, index) => (
               <Link href={`/blog/${item.id}`} target="_blank">
-                <CardComponent
-                  className={"my-3"}
-                  title={item.title}
-                  description={item.description}
-                  category={item.category}
-                  author={item.author}
-                  views={item.views}
-                  key={index}
-                />
+                <CardComponent className={"my-3"} key={index} />
               </Link>
-            ))}
+            ))} */}
+            <CardComponent className={"my-0"} />
           </div>
         </div>
       </MaxWidthWrapper>
