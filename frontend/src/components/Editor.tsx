@@ -54,7 +54,7 @@ const Editor = () => {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [value, setValue] = useState("");
-  const userID = user._id;
+  const userID = user._id ? user._id : null;
   const header = {
     Authorization: localStorage.getItem("accessToken"),
   };

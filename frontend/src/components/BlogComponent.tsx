@@ -7,7 +7,6 @@ type Tprops = {
 };
 
 const BlogComponent = async ({ id }: Tprops) => {
-  console.log(id);
   const res = await axios.get(`http://localhost:8000/blog/getpost/${id}`);
   const { data } = await res;
   const sanitizedContent = DOMPurify(data.content);
@@ -19,15 +18,19 @@ const BlogComponent = async ({ id }: Tprops) => {
           <div className="text-7xl text-muted-foreground font-semibold">
             {data?.title}
           </div>
-          <div className="text-lg font-medium italic tracking-wider self-end">
-            /{data?.category}
-          </div>
         </div>
 
-        <div className="my-5 flex flex-col justify-start items-start gap-y-5">
-          <div className="text-2xl font-bold tracking-wide">{data?.author}</div>
-          <div className="text-2xl tracking-wide leading-9 text-left">
+        <div className="my-5 flex justify-between items-stretch gap-y-5">
+          <div className="text-2xl tracking-wide leading-9 text-left text-muted-foreground">
             {data?.description}
+          </div>
+        </div>
+        <div className="my-5 flex justify-between items-center">
+          <div className="italic text-xl font-bold tracking-wide">
+            {data?.author}
+          </div>
+          <div className="text-lg font-medium italic tracking-wider">
+            {data?.category}
           </div>
         </div>
         {/* <div
@@ -35,7 +38,6 @@ const BlogComponent = async ({ id }: Tprops) => {
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         /> */}
         <div>{ReactHtmlParser(data.content)}</div>
-        <div>{data.content}</div>
       </div>
     </div>
   );

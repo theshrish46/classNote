@@ -71,7 +71,7 @@ export default function Home() {
                 <CardComponent className={"my-3"} key={index} />
               </Link>
             ))} */}
-            <CardComponent className={"my-0"} />
+            <CardComponent className={"my-10"} />
           </div>
         </div>
       </MaxWidthWrapper>
