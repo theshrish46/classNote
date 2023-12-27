@@ -9,14 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import Link from "next/link";
 
 type TProps = {
   className: String;
 };
 
 const CardComponent = async ({ className }: TProps) => {
-  // const res = await axios.get("http://localhost:8000/blog/getpost");
-  // const { data } = await res;
+  const res = await axios.get("http://localhost:8000/blog/getpost");
+  const { data } = await res;
   return (
     <div className={cn(className, "w-full")}>
       {/* <Card className="flex flex-col min-h-48 justify-between items-stretch hover:cursor-pointer">
@@ -34,24 +35,40 @@ const CardComponent = async ({ className }: TProps) => {
           <p className="text-sm font-semibold text-gray-600">{views}</p>
         </CardContent>
       </Card> */}
-      {/* {data.map((item, index) => (
-        <Card className="flex flex-col min-h-48 justify-between items-stretch hover:cursor-pointer border-2 border-gray-400">
-          <CardHeader className="flex gap-y-3 text-justify">
-            <CardTitle className="text-xl">{item.title}</CardTitle>
-            <CardDescription className="text-base text-muted-foreground">
-              {item.description}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex justify-between items-center">
-            <p className="text-sm font-semibold text-gray-600">
-              {item.category}
-            </p>
-            <p className="text-sm font-semibold text-gray-600 hover:text-blue-600">
-              {item.author}
-            </p>
-          </CardContent>
-        </Card>
-      ))} */}
+      {data.map(
+        (
+          item: {
+            _id: string;
+            title: string;
+            description: string;
+            author: string;
+            category: string;
+          },
+          index: any
+        ) => (
+          <Link href={`/blog/${item._id}`} target="_blank">
+            <Card
+              className="flex flex-col min-h-48 justify-between items-stretch hover:cursor-pointer border-2 border-gray-400"
+              key={index}
+            >
+              <CardHeader className="flex gap-y-3 text-justify">
+                <CardTitle className="text-xl">{item.title}</CardTitle>
+                <CardDescription className="text-base text-muted-foreground">
+                  {item.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-between items-center">
+                <p className="text-sm font-semibold text-gray-600">
+                  {item.category}
+                </p>
+                <p className="text-sm font-semibold text-gray-600 hover:text-blue-600">
+                  {item.author}
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+        )
+      )}
     </div>
   );
 };

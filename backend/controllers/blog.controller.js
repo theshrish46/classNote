@@ -26,4 +26,10 @@ const write = async (req, res) => {
   return res.json(new APIResponse(200, post, "Successfully created a post"));
 };
 
-export { write, getPost };
+const getPostWithId = async (req, res) => {
+  const id = req.params.id;
+  const post = await Post.findById(id);
+  return res.json(post);
+};
+
+export { write, getPost, getPostWithId };
