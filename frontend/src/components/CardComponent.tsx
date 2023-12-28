@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import axios from "axios";
 
 import { cn } from "@/lib/utils";
@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 
 type TProps = {
-  className: String;
+  className?: String;
 };
 
 const CardComponent = async ({ className }: TProps) => {
@@ -20,21 +20,6 @@ const CardComponent = async ({ className }: TProps) => {
   const { data } = await res;
   return (
     <div className={cn(className, "w-full")}>
-      {/* <Card className="flex flex-col min-h-48 justify-between items-stretch hover:cursor-pointer">
-        <CardHeader className="flex gap-y-3 text-justify">
-          <CardTitle className="text-xl">{data.title}</CardTitle>
-          <CardDescription className="text-base text-muted-foreground">
-            {data.description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex justify-between items-center">
-          <p className="text-sm font-semibold text-gray-600">{data.category}</p>
-          <p className="text-sm font-semibold text-gray-600 hover:text-blue-600">
-            {data.author}
-          </p>
-          <p className="text-sm font-semibold text-gray-600">{views}</p>
-        </CardContent>
-      </Card> */}
       {data.map(
         (
           item: {
@@ -46,9 +31,9 @@ const CardComponent = async ({ className }: TProps) => {
           },
           index: any
         ) => (
-          <Link href={`/blog/${item._id}`} target="_blank">
+          <Link href={`/blog/${item._id}`} target="_blank" key={index}>
             <Card
-              className="flex flex-col min-h-48 justify-between items-stretch hover:cursor-pointer border-2 border-gray-400"
+              className="flex flex-col min-h-48 justify-between items-stretch hover:cursor-pointer border-2 border-gray-400 my-10"
               key={index}
             >
               <CardHeader className="flex gap-y-3 text-justify">

@@ -6,6 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { useDispatch } from "react-redux";
+import { clearUser, setUser } from "./../../../redux/features/auth-slice";
+
 import {
   Form,
   FormControl,
@@ -20,6 +23,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const page = () => {
+  const dispatch = useDispatch();
+
   const formObject = z.object({
     email: z.string().email(),
     password: z.string(),
@@ -37,10 +42,17 @@ const page = () => {
     try {
       const res = await axios.post("http://localhost:8000/auth/login", values);
       const { data } = await res;
-      console.log(data.data);
-      localStorage.setItem("accessToken", data.data.accessToken);
-      localStorage.setItem("refreshToken", data.data.refreshToken);
-      localStorage.setItem("user", JSON.stringify(data.data.loggedUser));
+
+      dispatch(
+        setUser({
+          id: data.data.loggedUser._id,
+          name: data.data.loggedUser.name,
+          email: data.data.loggedUser.email,
+          accessToken: data.data.accessToken,
+          refreshToken: data.data.refreshToken,
+        })
+      );
+
       router.push("/");
     } catch (error) {
       console.log("Something went wrong while logging in", error);

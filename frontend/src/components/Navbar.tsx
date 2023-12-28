@@ -3,19 +3,17 @@ import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { Button, buttonVariants } from "./ui/button";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser } from "./../redux/features/auth-slice";
 
 const Navbar = () => {
-  const [user, setUser] = useState("");
-  useEffect(() => {
-    const localUser = localStorage.getItem("user");
-    const user = localUser ? JSON.parse(localUser) : null;
-    setUser(user);
-  }, []);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.userAuth.name);
+  // console.log("redux name", user);
 
   function handleLogout() {
-    localStorage.setItem("accessToken", "");
-    localStorage.setItem("refreshToken", "");
-    localStorage.setItem("user", "");
+    dispatch(clearUser());
   }
   return (
     <div className="py-8 sticky z-50 top-0 inset-x-0 h-16 bg-white">

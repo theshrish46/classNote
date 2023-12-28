@@ -1,4 +1,3 @@
-"use client";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import BlogComponent from "@/components/BlogComponent";
 
