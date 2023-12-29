@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import DOMPurify from "dompurify";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -11,10 +12,42 @@ import { Button, buttonVariants } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { cn } from "@/lib/utils";
+import { useSelector } from "react-redux";
 
-const Editor = () => {
-  const localUser = localStorage.getItem("user");
-  const user = localUser ? JSON.parse(localUser) : null;
+type DataProps = {
+  _id: string;
+  title: string;
+  author: string;
+  description: string;
+  category: string;
+  content: string;
+  authorId: string;
+  likes: any;
+  createdAt: any;
+  updatedAt: any;
+};
+
+type TProps = {
+  // propTitle?: string;
+  // propAuthor?: string;
+  // propCategory?: string;
+  // propDescription?: string;
+  // propValue?: string;
+  data?: DataProps | any;
+};
+
+const Editor = ({ data }: TProps) => {
+  // TODO: Make selector type safe
+  type User = {
+    id: string | null;
+    name: string | null;
+    email: string | null;
+    accessToken: string | null;
+    refreshToken: string | null;
+  };
+  const user = useSelector((state): User => state.userAuth);
+  // console.log(user);
+
   const modules = {
     toolbar: [
       [{ font: [] }],
@@ -49,16 +82,20 @@ const Editor = () => {
     "color",
     "code-block",
   ];
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const [value, setValue] = useState("");
-  const userID = user._id ? user._id : null;
+  const [title, setTitle] = useState<string | undefined>(data.title);
+  const [author, setAuthor] = useState<string | undefined>(data.author);
+  const [category, setCategory] = useState<string | undefined>(data.category);
+  const [description, setDescription] = useState<string | undefined>(
+    data.description
+  );
+  const sanitizedHTML = DOMPurify.sanitize(data.content);
+  const [value, setValue] = useState<string | undefined>(sanitizedHTML);
   const header = {
-    Authorization: localStorage.getItem("accessToken"),
+    Authorization: user.accessToken,
   };
+
   const router = useRouter();
+  const userID = user.id;
   async function handler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(value);
@@ -84,29 +121,30 @@ const Editor = () => {
         onSubmit={handler}
       >
         <Textarea
-          className="p-1 h-auto text-4xl font-semibold break-words border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200 scroll-smooth resize-none"
+          className="p-1 h-auto text-4xl font-semibold break-words border-none focus-visible:ring-0 shadow-none placeholder:text-gray-400 scroll-smooth resize-none"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <div className="w-full flex justify-between items-center">
           <Input
-            className="px-1 py-0 h-auto text-xl font-medium border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200"
+            className="px-1 py-0 h-auto text-xl font-medium border-none focus-visible:ring-0 shadow-none placeholder:text-gray-400"
             placeholder="Author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
           />
           <Input
-            className="px-1 py-0 h-auto text-xl font-medium border-none focus-visible:ring-0 shadow-none placeholder:text-gray-200"
+            className="px-1 py-0 h-auto text-xl font-medium border-none focus-visible:ring-0 shadow-none placeholder:text-gray-400"
             placeholder="Category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           />
         </div>
         <Textarea
+          placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="resize-none"
+          className="resize-none placeholder:text-gray-400 font-semibold"
         ></Textarea>
         <ReactQuill
           className={cn("border-none")}
