@@ -1,3 +1,4 @@
+import { APIError } from "../utils/ApiError.js";
 import Post from "./../models/Post.js";
 import { APIResponse } from "./../utils/APIResponse.js";
 
@@ -32,4 +33,14 @@ const getPostWithId = async (req, res) => {
   return res.json(post);
 };
 
-export { write, getPost, getPostWithId };
+const editPostWithId = async (req, res) => {
+  const postID = req.params.id;
+  const post = await Post.findById(id);
+  if (!post) {
+    throw new APIError(400, `Post with the post id ${id} doesn't exits`);
+  }
+  // const updatedPost = await Post.update
+  return res.json({ msg: "ok" });
+};
+
+export { write, getPost, getPostWithId, editPostWithId };

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios, { Method } from "axios";
 import { useRouter } from "next/navigation";
 import DOMPurify from "dompurify";
 
@@ -82,13 +82,13 @@ const Editor = ({ data }: TProps) => {
     "color",
     "code-block",
   ];
-  const [title, setTitle] = useState<string | undefined>(data.title);
-  const [author, setAuthor] = useState<string | undefined>(data.author);
-  const [category, setCategory] = useState<string | undefined>(data.category);
+  const [title, setTitle] = useState<string | undefined>(data?.title);
+  const [author, setAuthor] = useState<string | undefined>(data?.author);
+  const [category, setCategory] = useState<string | undefined>(data?.category);
   const [description, setDescription] = useState<string | undefined>(
-    data.description
+    data?.description
   );
-  const sanitizedHTML = DOMPurify.sanitize(data.content);
+  const sanitizedHTML = DOMPurify.sanitize(data?.content);
   const [value, setValue] = useState<string | undefined>(sanitizedHTML);
   const header = {
     Authorization: user.accessToken,
@@ -96,21 +96,29 @@ const Editor = ({ data }: TProps) => {
 
   const router = useRouter();
   const userID = user.id;
+
   async function handler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(value);
-    const res = await axios.post(
-      "http://localhost:8000/blog/write",
-      {
-        userID,
-        title,
-        category,
-        author,
-        description,
-        value,
-      },
-      { headers: header }
-    );
+    const postData = {
+      userID,
+      title,
+      author,
+      description,
+      category,
+      value,
+    };
+    const url = data
+      ? `http://localhost:8000/blog/edit/${data._id}`
+      : "http://localhost:8000/blog/write";
+    const method = data ? "put" : "post";
+
+    const res = await axios({
+      method: method as Method,
+      url,
+      data: postData,
+      headers: header,
+    });
     router.push("/");
   }
 
