@@ -20,7 +20,9 @@ import {
 } from "@/components/ui/form";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const page = () => {
   const dispatch = useDispatch();
@@ -59,7 +61,7 @@ const page = () => {
     }
   }
   return (
-    <MaxWidthWrapper className="py-10">
+    <MaxWidthWrapper className="py-10 flex flex-col items-center justify-center gap-y-5">
       <Form {...form}>
         <form
           className="w-1/2 mx-auto flex flex-col justify-center items-stretch gap-y-5"
@@ -96,6 +98,12 @@ const page = () => {
           <Button type="submit">Login</Button>
         </form>
       </Form>
+      <Link
+        href={"/register"}
+        className={cn(buttonVariants({ variant: "link" }))}
+      >
+        Create a new account
+      </Link>
     </MaxWidthWrapper>
   );
 };

@@ -11,6 +11,7 @@ import {
 } from "./ui/card";
 import Link from "next/link";
 import NoPost from "./NoPost";
+import { Eye } from "lucide-react";
 
 type TProps = {
   className?: String;
@@ -35,6 +36,7 @@ const CardComponent = async ({ className }: TProps) => {
                 description: string;
                 author: string;
                 category: string;
+                views: number;
               },
               index: any
             ) => (
@@ -53,6 +55,15 @@ const CardComponent = async ({ className }: TProps) => {
                     <p className="text-sm font-semibold text-gray-600">
                       {item.category}
                     </p>
+                    <div className="flex gap-x-2 items-center">
+                      <Eye
+                        size={18}
+                        className="text-muted-foreground text-gray-900"
+                      />
+                      <p className="text-sm text-gray-900 font-medium">
+                        {item.views} views
+                      </p>
+                    </div>
                     <p className="text-sm font-semibold text-gray-600 hover:text-blue-600">
                       {item.author}
                     </p>

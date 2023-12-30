@@ -6,44 +6,42 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { Textarea } from "./ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import React, { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
-const Comment = () => {
-  const commetnSchema = z.object({
-    postId: z.string(),
-    userId: z.string(),
-    comment: z.string(),
-  });
-  const form = useForm<z.infer<typeof commetnSchema>>({
-    resolver: zodResolver(commetnSchema),
-  });
+type TProps = {
+  postId: string;
+};
 
-  function commentHandler(values) {
-    console.log(values);
+const Comment = ({ postId }: TProps) => {
+  const user = useSelector((state) => state.userAuth);
+  const userId = user.id;
+  const [comment, setComment] = useState("");
+  async function commentHandler(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const res = axios.post(`http://localhost:8000/blog/comment/${postId}`, {
+      userId,
+      postId,
+      comment,
+    });
+    console.log(res);
+    const { data } = await res;
+    console.log(data);
   }
   return (
     <div className="w-full mx-auto">
-      <Form {...form}>
-        <form
-          className="flex flex-col gap-y-5"
-          onSubmit={form.handleSubmit(commentHandler)}
-        >
-          <FormField
-            control={form.control}
-            name="comment"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Textarea
-                    className="resize-none h-24 w-full text-base text-gray-800"
-                    placeholder="Comment..."
-                  ></Textarea>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <Button className="w-1/5">Comment</Button>
-        </form>
-      </Form>
+      <form className="flex flex-col gap-y-5" onSubmit={commentHandler}>
+        <Textarea
+          className="resize-none h-24 w-full text-base text-gray-900 font-medium"
+          placeholder="Comment..."
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        ></Textarea>
+        <Button type="submit" className="w-1/5">
+          Comment
+        </Button>
+      </form>
     </div>
   );
 };
