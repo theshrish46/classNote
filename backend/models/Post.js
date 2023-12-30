@@ -22,10 +22,19 @@ const PostSchema = mongoose.Schema(
       ref: "user",
     },
     likes: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "user",
-      default: [],
+      type: Number,
+      default: 0,
     },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    likedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
     createdAt: {
       type: Date,
       default: Date.now(),

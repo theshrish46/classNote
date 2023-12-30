@@ -2,6 +2,8 @@
 import ReactHtmlParser from "react-html-parser";
 import { useSelector } from "react-redux";
 import Editor from "./Editor";
+import Comment from "./Comment";
+import { Button, buttonVariants } from "./ui/button";
 
 type TProps = {
   id: any;
@@ -14,7 +16,7 @@ const BlogCard = ({ data, id }: TProps) => {
   const { authorId } = data;
 
   return (
-    <div>
+    <div className="w-full">
       {userID == authorId ? (
         <div>
           He is the author
@@ -54,6 +56,7 @@ const BlogCard = ({ data, id }: TProps) => {
             </div>
             <div>{ReactHtmlParser(data.content)}</div>
           </div>
+          <Comment />
         </div>
       )}
     </div>

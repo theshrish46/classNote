@@ -7,8 +7,6 @@ export const verifyJWT = async (req, _, next) => {
     const token =
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
-
-    console.log(token);
     if (!token) {
       throw new APIError(401, "No token found");
     }
@@ -25,7 +23,7 @@ export const verifyJWT = async (req, _, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     throw new APIError(400, "JWT verification failed", error);
   }
 };

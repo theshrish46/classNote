@@ -1,18 +1,22 @@
-import dotnev from "dotenv";
+import dotenv from "dotenv";
+
 import { app } from "./app.js";
+import connectDB from "./../db/connectDB.js";
 
-import connectDB from "../db/connectDB.js";
-
-dotnev.config({
+dotenv.config({
   path: "./.env",
 });
 
-connectDB()
-  .then(() => {
+const startServer = async () => {
+  try {
+    await connectDB();
     app.listen(process.env.PORT, () => {
-      console.log("Server running on PORT : ", process.env.PORT);
+      console.log("Server running on PORT:", process.env.PORT);
     });
-  })
-  .catch((error) => {
-    console.log("Something went wrong while running server : ", error);
-  });
+  } catch (error) {
+    console.error("Error while connecting to the database:", error);
+    process.exit(1);
+  }
+};
+
+startServer()

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { ReactHTMLElement, useState } from "react";
 import axios, { Method } from "axios";
 import { useRouter } from "next/navigation";
 import DOMPurify from "dompurify";
@@ -13,6 +13,18 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { cn } from "@/lib/utils";
 import { useSelector } from "react-redux";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { revalidatePath } from "next/cache";
+import next from "next";
 
 type DataProps = {
   _id: string;
@@ -122,8 +134,17 @@ const Editor = ({ data }: TProps) => {
     router.push("/");
   }
 
+  async function deletePost() {
+    console.log("deleting post");
+    const deletePost = await axios.delete(
+      `http://localhost:8000/blog/delete/${data._id}`
+    );
+    console.log(deletePost);
+    router.push("/");
+  }
+
   return (
-    <div className="my-10 flex justify-center flex-col items-center">
+    <div className="my-10 flex justify-center flex-col items-stretch w-full">
       <form
         className="flex flex-col gap-y-5 justify-center items-center"
         onSubmit={handler}
@@ -155,16 +176,38 @@ const Editor = ({ data }: TProps) => {
           className="resize-none placeholder:text-gray-400 font-semibold"
         ></Textarea>
         <ReactQuill
-          className={cn("border-none")}
+          className={cn("border-none w-full")}
           theme="snow"
           formats={formats}
           modules={modules}
           value={value}
           onChange={(value) => setValue(value)}
         />
-        <Button type="submit" className={cn(buttonVariants(), "w-full")}>
-          Submit
-        </Button>
+        <div className="flex justify-start items-center gap-x-5 w-full">
+          <Button type="submit" className={cn(buttonVariants(), "self-start")}>
+            Submit
+          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className={"bg-destructive"}>Delete</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete Post</DialogTitle>
+                <DialogDescription>
+                  Do you really want to delete the post?
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button onClick={deletePost} className="bg-destructive">
+                    Delete
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </form>
     </div>
   );
