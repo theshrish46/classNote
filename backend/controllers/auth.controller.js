@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import Post from "../models/Post.js";
 import User from "./../models/User.js";
 import { APIError } from "./../utils/ApiError.js";
 import { APIResponse } from "./../utils/APIResponse.js";
@@ -79,4 +81,14 @@ const login = async (req, res) => {
     );
 };
 
-export { register, login };
+const getuserpost = async (req, res) => {
+  // console.log(req.body);
+  const { authorId } = req.body;
+  // console.log(_id);
+  const user = User.findById(authorId);
+  console.log(user);
+  // const post = Post.findById()
+  res.send("ok");
+};
+
+export { register, login, getuserpost };

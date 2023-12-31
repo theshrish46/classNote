@@ -11,13 +11,10 @@ type TProps = {
 const HomePage = ({ children }: TProps) => {
   const user = useSelector((state) => state.userAuth);
   const router = useRouter();
-  if (!user.id == null) {
-    router.push("/login");
-  }
   return (
     <>
       {user.id == null ? (
-        router.push("/login")
+        router.push("/auth")
       ) : (
         <div>
           <div className="py-20 text-center">

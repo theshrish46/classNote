@@ -2,6 +2,7 @@ import { APIError } from "../utils/ApiError.js";
 import Post from "./../models/Post.js";
 import Comment from "./../models/Comment.js";
 import { APIResponse } from "./../utils/APIResponse.js";
+import User from "../models/User.js";
 
 const getPost = async (req, res) => {
   try {
@@ -28,6 +29,7 @@ const getPost = async (req, res) => {
 const getPostWithId = async (req, res) => {
   try {
     const postId = req.params.id;
+    const { userId } = req.body;
     const post = await Post.findById(postId);
 
     const comment = await Comment.find({ postId });
@@ -37,7 +39,6 @@ const getPostWithId = async (req, res) => {
     if (!comment) {
       throw new APIError(404, "No comment found");
     }
-
     post.views += 1;
     await post.save();
     return res.status(200).json({
@@ -126,45 +127,4 @@ const deletePostWithId = async (req, res) => {
   }
 };
 
-const commentPost = async (req, res) => {
-  try {
-    const postIdParams = req.params.id;
-    const post = await Post.findById(postIdParams);
-    if (!post) {
-      throw new APIError(400, "NO post found");
-    }
-    const { userId, postId, comment } = req.body;
-    console.log("userid", userId);
-    const commentPost = await Comment.create({
-      postId: postId,
-      authorId: userId,
-      text: comment,
-    });
-    return res.send(commentPost);
-  } catch (error) {
-    console.log("Error in the comment route", error);
-  }
-};
-
-const likedUser = async (req, res) => {
-  const postId = req.params.id;
-  const post = await Post.findById(postId);
-  if (!post) {
-    throw new APIError(404, "No post found");
-  }
-  const { userId } = req.body;
-  post.likes += 1;
-  await post.save();
-  post.likedBy = userId;
-  await post.save();
-  return res.send(post);
-};
-export {
-  write,
-  getPost,
-  getPostWithId,
-  editPostWithId,
-  deletePostWithId,
-  commentPost,
-  likedUser,
-};
+export { write, getPost, getPostWithId, editPostWithId, deletePostWithId };

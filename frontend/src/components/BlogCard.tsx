@@ -8,6 +8,7 @@ import { Eye, Heart } from "lucide-react";
 import axios from "axios";
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
+import CommentCard from "./CommentCard";
 
 type TProps = {
   blogId: any;
@@ -15,8 +16,8 @@ type TProps = {
 };
 
 const BlogCard = ({ data, blogId }: TProps) => {
-  const user = useSelector((state) => state.userAuth);
-  const userID = user.id;
+  const userState = useSelector((state) => state.userAuth);
+  const userID = userState.id;
   const { post, comment } = data;
   const { authorId } = post;
   // const [liked, isLiked] = useState(false);
@@ -92,22 +93,7 @@ const BlogCard = ({ data, blogId }: TProps) => {
             </div>
             <div>{ReactHtmlParser(post.content)}</div>
           </div>
-          <div className="my-5">
-            {comment.map((item, index) => (
-              <div
-                className="bg-secondary my-4 py-4 flex flex-col gap-y-3"
-                key={index}
-              >
-                <div className="flex gap-x-3 px-3">
-                  <div>Author {item.authorId} On the post</div>
-                  <div>Post {item.postId}</div>
-                </div>
-                <div className="px-3 text-lg font-medium text-gray-900">
-                  {item.text}
-                </div>
-              </div>
-            ))}
-          </div>
+          <CommentCard dataa={data}/>
           <Comment postId={blogId} />
         </div>
       )}

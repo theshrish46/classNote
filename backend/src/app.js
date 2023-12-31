@@ -8,6 +8,7 @@ const app = express();
 
 import { authRouter } from "./../routes/auth.router.js";
 import { blogRouter } from "./../routes/blog.router.js";
+import { commentRouter } from "../routes/comment.router.js";
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
@@ -17,5 +18,6 @@ app.use(cookieParser());
 
 app.use("/auth", authRouter);
 app.use("/blog", blogRouter);
+app.use("/comment", commentRouter);
 
 export { app };

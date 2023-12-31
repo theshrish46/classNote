@@ -19,15 +19,22 @@ const Comment = ({ postId }: TProps) => {
   const userId = user.id;
   const [comment, setComment] = useState("");
   async function commentHandler(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const res = axios.post(`http://localhost:8000/blog/comment/${postId}`, {
-      userId,
-      postId,
-      comment,
-    });
-    console.log(res);
-    const { data } = await res;
-    console.log(data);
+    try {
+      e.preventDefault();
+      const res = axios.post(
+        `http://localhost:8000/comment/comment/${postId}`,
+        {
+          userId,
+          postId,
+          comment,
+        }
+      );
+      const { data } = await res;
+      const { post, user } = await data;
+      console.log(user, post);
+    } catch (error) {
+      console.log("error", error);
+    }
   }
   return (
     <div className="w-full mx-auto">

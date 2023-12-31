@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,10 +17,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/features/auth-slice";
 
 const page = () => {
+  const [variant, setVariant] = useState("login");
+  const toggleVariant = useCallback(() => {
+    setVariant((currentVariant) =>
+      currentVariant == "login" ? "register" : "login"
+    );
+  }, []);
   const formObject = z.object({
     name: z
       .string()
@@ -39,16 +49,26 @@ const page = () => {
   });
 
   const router = useRouter();
+  const dispatch = useDispatch();
   async function handler(values: z.infer<typeof formObject>) {
-    console.log(values);
+    const url =
+      variant == "login"
+        ? "http://localhost:8000/auth/login"
+        : "http://localhost:8000/auth/register";
     try {
-      const res = await axios.post(
-        "http://localhost:8000/auth/register",
-        values
-      );
+      const res = await axios.post(url, values);
       const { data } = await res;
-      console.log(data);
-      router.push("/login");
+      const { loggedUser } = data.data;
+      dispatch(
+        setUser({
+          id: loggedUser._id,
+          name: loggedUser.name,
+          email: loggedUser.email,
+          accessToken: data.data.accessToken,
+          refreshToken: data.data.refreshToken,
+        })
+      );
+      router.push("/");
     } catch (error) {
       console.log("Error in axios", error);
     }
@@ -56,21 +76,26 @@ const page = () => {
   return (
     <MaxWidthWrapper className="py-10">
       <Form {...form}>
-        <form className="w-1/2 mx-auto" onSubmit={form.handleSubmit(handler)}>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="name" {...field} />
-                </FormControl>
-                <FormDescription>Enter your name here!</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form
+          className="w-1/2 mx-auto flex flex-col gap-y-7"
+          onSubmit={form.handleSubmit(handler)}
+        >
+          {variant == "register" && (
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="name" {...field} />
+                  </FormControl>
+                  <FormDescription>Enter your name here!</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             name="email"
             control={form.control}
@@ -100,6 +125,17 @@ const page = () => {
             )}
           />
           <Button type="submit">Submit</Button>
+          <div
+            onClick={toggleVariant}
+            className={cn(
+              buttonVariants({ variant: "link" }),
+              "cursor-pointer"
+            )}
+          >
+            {variant == "login"
+              ? "Don't have an account? Register"
+              : "Already Have an account? Login"}
+          </div>
         </form>
       </Form>
     </MaxWidthWrapper>
