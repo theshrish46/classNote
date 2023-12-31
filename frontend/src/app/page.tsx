@@ -1,6 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
-
 import CardComponent from "@/components/CardComponent";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 

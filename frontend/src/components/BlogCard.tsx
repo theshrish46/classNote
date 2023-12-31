@@ -6,7 +6,8 @@ import Comment from "./Comment";
 import { Button, buttonVariants } from "./ui/button";
 import { Eye, Heart } from "lucide-react";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 
 type TProps = {
   blogId: any;
@@ -18,12 +19,19 @@ const BlogCard = ({ data, blogId }: TProps) => {
   const userID = user.id;
   const { post, comment } = data;
   const { authorId } = post;
+  // const [liked, isLiked] = useState(false);
+  const liked = localStorage.getItem("liked");
 
   async function handleLike(e) {
+    if (liked == "true") {
+      return;
+    }
     e.preventDefault();
     const res = axios.post(`http://localhost:8000/blog/like/${post._id}`, {
       userId: userID,
     });
+    // isLiked(true);
+    localStorage.setItem("liked", "true");
     console.log(res);
     const { data } = await res;
     console.log("data", data);
@@ -34,8 +42,20 @@ const BlogCard = ({ data, blogId }: TProps) => {
       <div className="w-full">
         <div className="w-full flex justify-end items-center gap-x-3">
           <div className="hover:cursor-pointer">
-            <Button variant={"link"} onClick={handleLike}>
-              <Heart size={24} />
+            <Button
+              variant={"link"}
+              onClick={handleLike}
+              className="flex justify-center items-center gap-x-1.5"
+            >
+              <Heart
+                size={24}
+                className={cn(
+                  liked == "true"
+                    ? "text-pink-700 font-bold fill-pink-700"
+                    : "text-pink-700"
+                )}
+              />
+              <div className={"no-underline"}>{post.likes}</div>
             </Button>
           </div>
           <div className="flex gap-x-2 justify-end items-center">
