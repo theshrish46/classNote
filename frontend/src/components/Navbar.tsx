@@ -5,6 +5,7 @@ import { Button, buttonVariants } from "./ui/button";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "./../redux/features/auth-slice";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -28,18 +29,38 @@ const Navbar = () => {
                 <Button onClick={handleLogout}>Logout</Button>
               ) : (
                 <div>
-                  <Link href={"/login"} className={buttonVariants()}>
+                  <Link
+                    href={"/login"}
+                    className={buttonVariants({ variant: "link" })}
+                  >
                     Login
                   </Link>
                 </div>
               )}
             </div>
             <span className="h-6 w-px bg-gray-300" aria-hidden="true"></span>
-            <div>
-              <Link href={"/write"} className="font-medium text-lg">
-                Write
-              </Link>
-            </div>
+            {user ? (
+              <div>
+                <Link
+                  href={"/write"}
+                  className={cn(
+                    buttonVariants({ variant: "link" }),
+                    "font-medium text-lg"
+                  )}
+                >
+                  Write
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <Link
+                  className={cn(buttonVariants({ variant: "link" }))}
+                  href={"/register"}
+                >
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </MaxWidthWrapper>
       </header>
