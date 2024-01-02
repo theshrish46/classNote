@@ -19,7 +19,7 @@ import { register } from "../actions/auth-action";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-const page = () => {
+const Page = () => {
   const [variant, setVariant] = useState("register");
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
@@ -129,4 +129,4 @@ const page = () => {
     </div>
   );
 };
-export default page;
+export default Page;
