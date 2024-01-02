@@ -1,6 +1,4 @@
 "use client";
-
-
 import MaxWidthWrapper from "@/components/site-components/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -21,19 +19,19 @@ import { register } from "../actions/auth-action";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-export const formSchema = z.object({
-  name: z.string(),
-  email: z.string(),
-  password: z.string(),
-});
-
-export default function Page() {
+const page = () => {
   const [variant, setVariant] = useState("register");
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
       currentVariant === "login" ? "register" : "login"
     );
   }, []);
+
+  const formSchema = z.object({
+    name: z.string(),
+    email: z.string(),
+    password: z.string(),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -130,5 +128,5 @@ export default function Page() {
       </div>
     </div>
   );
-}
-// export default page;
+};
+export default page;
