@@ -25,7 +25,7 @@ export const formSchema = z.object({
   password: z.string(),
 });
 
-const page = () => {
+export default function page() {
   const [variant, setVariant] = useState("register");
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
@@ -128,5 +128,5 @@ const page = () => {
       </div>
     </div>
   );
-};
-export default page;
+}
+// export default page;
