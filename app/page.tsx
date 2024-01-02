@@ -1,9 +1,12 @@
-import Image from 'next/image'
+import MaxWidthWrapper from "@/components/site-components/MaxWidthWrapper";
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <main>
-      
-    </main>
+    <div>
+      <MaxWidthWrapper>
+        dskf
+      </MaxWidthWrapper>
+    </div>
   )
 }
