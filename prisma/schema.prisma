@@ -30,6 +30,7 @@ model Post {
   description String
   category    String
   content     String
+  authorName  String
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId

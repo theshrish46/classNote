@@ -17,6 +17,10 @@ export function accessToken(id: string, name: string) {
     )
 }
 
+export function decodedToken(token: any) {
+    return jwt.verify(token, 'asdfadsf')
+}
+
 export async function hashPassword(password: string) {
     return await bcrypt.hash(password, 10)
 }
