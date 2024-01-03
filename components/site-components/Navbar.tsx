@@ -2,6 +2,8 @@ import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { Icons } from "./Icons";
 import { ModeToggle } from "../mode-toggle";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "../ui/button";
 
 const Navbar = async () => {
   return (
@@ -18,7 +20,18 @@ const Navbar = async () => {
                   <Icons.logo className="" />
                   <p className="text-xl font-bold">classnote</p>
                 </Link>
-                <ModeToggle />
+                <div className="flex justify-center items-center gap-x-3">
+                  <ModeToggle />
+                  <Link
+                    href={"/write"}
+                    className={cn(
+                      buttonVariants({ variant: "link" }),
+                      "font-semibold text-lg"
+                    )}
+                  >
+                    Write
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
