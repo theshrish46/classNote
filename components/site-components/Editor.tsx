@@ -6,7 +6,7 @@ import DOMPurify from "dompurify";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import "react-quill/dist/quill.bubble.css";
+// import "react-quill/dist/quill.bubble.css";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,8 @@ import next from "next";
 import { write } from "@/app/actions/editor-actions";
 
 import { cookies } from "next/headers";
+import { accessToken, decodedToken } from "@/lib/jwt-token";
+import axios, { Method } from "axios";
 
 type DataProps = {
   _id: string;
@@ -64,7 +66,7 @@ const Editor = ({ data }: TProps) => {
   const modules = {
     toolbar: [
       [{ font: [] }],
-      [{ header: [1, 2, 3, 4, 5, 6] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ["bold", "italic", "underline", "strike"],
       [{ color: [] }, { background: [] }],
       [{ script: "sub" }, { script: "super" }],
@@ -96,42 +98,45 @@ const Editor = ({ data }: TProps) => {
     "code-block",
   ];
 
-  const [title, setTitle] = useState<string | undefined>(data?.title);
-  const [author, setAuthor] = useState<string | undefined>(data?.author);
-  const [category, setCategory] = useState<string | undefined>(data?.category);
-  const [description, setDescription] = useState<string | undefined>(
-    data?.description
-  );
-  const sanitizedHTML = DOMPurify.sanitize(data?.content);
-  const [value, setValue] = useState<string | undefined>(sanitizedHTML);
-
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  // const sanitizedHTML = DOMPurify.sanitize("");
+  const [value, setValue] = useState("");
   const router = useRouter();
-  // const userID = user.id;
 
-  // async function handler(e: React.FormEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-  //   console.log(value);
-  //   // const postData = {
-  //   //   // userID,
-  //   //   title,
-  //   //   author,
-  //   //   description,
-  //   //   category,
-  //   //   value,
-  //   // };
-  //   // const url = data
-  //   //   ? `http://localhost:8000/blog/edit/${data._id}`
-  //   //   : "http://localhost:8000/blog/write";
-  //   // const method = data ? "put" : "post";
+  async function handler(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.log(value);
+    const postData = {
+      title,
+      author,
+      description,
+      category,
+      value,
+    };
+    const url = data ? `/api/write/${data._id}` : "/api/write";
+    const method = data ? "put" : "post";
 
-  //   // const res = await axios({
-  //   //   method: method as Method,
-  //   //   url,
-  //   //   data: postData,
-  //   //   headers: header,
-  //   // });
-  //   router.push("/");
-  // }
+    // const res = await axios({
+    //   method: method as Method,
+    //   url,
+    //   data: postData,
+    // });
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        description,
+        author,
+        category,
+        value,
+      }),
+    });
+    console.log(res);
+    router.push("/");
+  }
 
   // async function deletePost() {
   //   console.log("deleting post");
@@ -146,7 +151,8 @@ const Editor = ({ data }: TProps) => {
     <div className="my-10 flex justify-center flex-col items-stretch w-full">
       <form
         className="flex flex-col gap-y-5 justify-center items-center"
-        action={write}
+        // action={write}
+        onSubmit={handler}
       >
         <Textarea
           name="title"
@@ -179,11 +185,11 @@ const Editor = ({ data }: TProps) => {
           className="resize-none placeholder:text-gray-400 font-semibold focus-visible:ring-0 border-none focus-visible:ring-offset-0"
         ></Textarea>
         <ReactQuill
-          name="value"
           className={cn("border-none w-full")}
           theme="snow"
           formats={formats}
           modules={modules}
+          // placeholder="Tell your story..."
           value={value}
           onChange={setValue}
         />
