@@ -25,10 +25,8 @@ import {
 import { revalidatePath } from "next/cache";
 import next from "next";
 import { write } from "@/app/actions/editor-actions";
-
-import { cookies } from "next/headers";
-import { accessToken, decodedToken } from "@/lib/jwt-token";
-import axios, { Method } from "axios";
+import { db } from "@/lib/db";
+import axios from "axios";
 
 type DataProps = {
   _id: string;
@@ -63,41 +61,6 @@ const Editor = ({ data }: TProps) => {
   };
   // console.log(user);
 
-  const modules = {
-    toolbar: [
-      [{ font: [] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ color: [] }, { background: [] }],
-      [{ script: "sub" }, { script: "super" }],
-      ["blockquote", "code-block"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-      ["clean"],
-    ],
-  };
-
-  const formats = [
-    "header",
-    "font",
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "align",
-    "strike",
-    "script",
-    "blockquote",
-    "background",
-    "list",
-    "bullet",
-    "indent",
-    "link",
-    "image",
-    "color",
-    "code-block",
-  ];
-
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
@@ -108,7 +71,7 @@ const Editor = ({ data }: TProps) => {
 
   async function handler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(value);
+    console.log("value", value);
     const postData = {
       title,
       author,
@@ -118,23 +81,14 @@ const Editor = ({ data }: TProps) => {
     };
     const url = data ? `/api/write/${data._id}` : "/api/write";
     const method = data ? "put" : "post";
-
-    // const res = await axios({
-    //   method: method as Method,
-    //   url,
-    //   data: postData,
-    // });
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        description,
-        author,
-        category,
-        value,
-      }),
+    const res = await axios.post("/api/post", {
+      title,
+      description,
+      author,
+      category,
+      value,
     });
-    console.log(res);
+
     router.push("/");
   }
 
@@ -222,3 +176,38 @@ const Editor = ({ data }: TProps) => {
 };
 
 export default Editor;
+
+const modules = {
+  toolbar: [
+    [{ font: [] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    ["bold", "italic", "underline", "strike"],
+    [{ color: [] }, { background: [] }],
+    [{ script: "sub" }, { script: "super" }],
+    ["blockquote", "code-block"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+    ["clean"],
+  ],
+};
+
+const formats = [
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "align",
+  "strike",
+  "script",
+  "blockquote",
+  "background",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+  "color",
+  "code-block",
+];

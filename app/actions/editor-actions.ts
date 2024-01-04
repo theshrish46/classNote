@@ -29,16 +29,4 @@ export const write = async (formData: FormData) => {
         console.log('already existing title')
     }
 
-    const post = db.post.create({
-        data: {
-            title: title as string,
-            authorName: author as string,
-            category: category as string,
-            description: description as string,
-            content: value as string,
-            author: id
-        }
-    })
-    console.log('post', post.then((data) => console.log(data)))
-
 }
