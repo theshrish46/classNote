@@ -2,7 +2,7 @@
 import { cookies } from 'next/headers'
 
 import { db } from "@/lib/db"
-import { accessToken, hashPassword } from "@/lib/jwt-token";
+import { accessToken, comparePassword, hashPassword } from "@/lib/jwt-token";
 import { redirect } from 'next/navigation';
 
 
@@ -25,7 +25,31 @@ export const register = async (formData: FormData) => {
             password: hashedPassword
         }
     })
-    const token = accessToken(userDoc.id, userDoc.name)
+    redirect('/')
+}
+
+export const login = async (formData: FormData) => {
+    const email = formData.get('email')
+    const password = formData.get('password')
+    const existingUser = await db.user.findFirst({
+        where: {
+            email: email as string
+        }
+    })
+    if (!existingUser) {
+        console.log('No user found')
+    }
+    const comparedPassword = await comparePassword(password as string, existingUser?.password as string)
+    if (!comparedPassword) {
+        console.log("Password didn't match")
+    }
+    const userDoc = await db.user.findFirst({
+        where: {
+            id: existingUser?.id
+        }
+    })
+
+    const token = accessToken(userDoc?.id as string, userDoc?.name as string)
     cookies().set('accessToken', token)
     redirect('/')
 }
