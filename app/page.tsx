@@ -16,7 +16,7 @@ export default async function Home() {
         {post.length > 0 ? (
           post.map((item, index) => (
             <div>
-              <BlogCard data={item} key={index} />
+              <BlogCard data={item} key={item.id} />
             </div>
           ))
         ) : (
