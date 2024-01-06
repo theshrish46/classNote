@@ -93,7 +93,6 @@ const Editor = ({ data }: TProps) => {
     <div className="my-10 flex justify-center flex-col items-stretch w-full">
       <form
         className="flex flex-col gap-y-5 justify-center items-center"
-        // action={write}
         onSubmit={handler}
       >
         <Textarea
