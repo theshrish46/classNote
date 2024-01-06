@@ -15,12 +15,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { register } from "../actions/auth-action";
+import { login, register } from "../actions/auth-action";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 const Page = () => {
-  const [variant, setVariant] = useState("register");
+  const [variant, setVariant] = useState("login");
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
       currentVariant === "login" ? "register" : "login"
@@ -59,7 +59,10 @@ const Page = () => {
 
         <div className="grid gap-6">
           <Form {...form}>
-            <form className="flex flex-col gap-y-3" action={register}>
+            <form
+              className="flex flex-col gap-y-3"
+              action={variant == "register" ? register : login}
+            >
               <div className="grid gap-2">
                 {variant == "register" && (
                   <FormField

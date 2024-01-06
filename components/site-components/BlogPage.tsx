@@ -2,9 +2,9 @@
 
 import { JwtPayload } from "jsonwebtoken";
 import Editor from "./Editor";
-import ReactHTMLParser from "react-html-parser";
+import parse from "html-react-parser";
 import { Eye, ThumbsUp } from "lucide-react";
-
+import { redirect } from "next/navigation";
 interface BlogDataProps {
   id: string;
   title: string;
@@ -35,12 +35,15 @@ const BlogPage = ({ data, token }: BlogPageProps) => {
     month: "short",
   });
   const createdDay = createdDate.getDate().toString().padEnd(1, "0");
+  if (!token) {
+    redirect("/auth");
+  }
 
   return (
     <div>
       {token.id == data.authorId ? (
         <div>
-          <Editor />
+          <Editor data={data} key={data.id} />
         </div>
       ) : (
         <div className="my-12 flex flex-col gap-y-5 justify-center items-start">
@@ -65,9 +68,7 @@ const BlogPage = ({ data, token }: BlogPageProps) => {
             </div>
           </div>
 
-          <div className="text-lg dark:text-white">
-            {ReactHTMLParser(data.content)}
-          </div>
+          <div className="text-lg dark:text-white">{parse(data.content)}</div>
         </div>
       )}
     </div>

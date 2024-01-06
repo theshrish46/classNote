@@ -11,7 +11,7 @@ import ReactHTMLParser from "react-html-parser";
 export default async function Home() {
   const post = await db.post.findMany();
   return (
-    <div>
+    <>
       <MaxWidthWrapper>
         {post.length > 0 ? (
           post.map((item, index) => (
@@ -31,6 +31,6 @@ export default async function Home() {
           </div>
         )}
       </MaxWidthWrapper>
-    </div>
+    </>
   );
 }

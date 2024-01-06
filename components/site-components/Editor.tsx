@@ -22,11 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { revalidatePath } from "next/cache";
-import next from "next";
-import { write } from "@/app/actions/editor-actions";
-import { db } from "@/lib/db";
-import axios from "axios";
+import axios, { Method } from "axios";
 
 type DataProps = {
   _id: string;
@@ -59,14 +55,12 @@ const Editor = ({ data }: TProps) => {
     accessToken: string | null;
     refreshToken: string | null;
   };
-  // console.log(user);
 
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  // const sanitizedHTML = DOMPurify.sanitize("");
-  const [value, setValue] = useState("");
+  const [title, setTitle] = useState(data?.title);
+  const [author, setAuthor] = useState(data?.authorName);
+  const [category, setCategory] = useState(data?.category);
+  const [description, setDescription] = useState(data?.description);
+  const [value, setValue] = useState(data?.content);
   const router = useRouter();
 
   async function handler(e: React.FormEvent<HTMLFormElement>) {
@@ -79,27 +73,21 @@ const Editor = ({ data }: TProps) => {
       category,
       value,
     };
-    const url = data ? `/api/write/${data._id}` : "/api/write";
+    console.log(data.id);
+    console.log(data);
+    const url = data ? `/api/post/${data.id}` : "/api/post";
     const method = data ? "put" : "post";
-    const res = await axios.post("/api/post", {
-      title,
-      description,
-      author,
-      category,
-      value,
+
+    const res = await axios({
+      method: method as Method,
+      url: url,
+      data: postData,
     });
+    console.log(res);
+    console.log(res.data);
 
     router.push("/");
   }
-
-  // async function deletePost() {
-  //   console.log("deleting post");
-  //   // const deletePost = await axios.delete(
-  //   //   `http://localhost:8000/blog/delete/${data._id}`
-  //   // );
-  //   console.log(deletePost);
-  //   router.push("/");
-  // }
 
   return (
     <div className="my-10 flex justify-center flex-col items-stretch w-full">

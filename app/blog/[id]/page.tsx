@@ -10,15 +10,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
       id: params.id,
     },
   });
-  //   console.log("posts", post);
+  
   const token = cookies().get("accessToken");
-  const decoded = decodedToken(token?.value);
+  const decoded = token ? decodedToken(token?.value) : null;
   return (
-    <div>
-      <MaxWidthWrapper>
+    <>
+      <MaxWidthWrapper className="container">
         <BlogPage data={post} token={decoded} key={post?.id} />
       </MaxWidthWrapper>
-    </div>
+    </>
   );
 };
 export default Page;
