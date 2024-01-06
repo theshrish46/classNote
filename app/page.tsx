@@ -3,19 +3,17 @@ import MaxWidthWrapper from "@/components/site-components/MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
-import { ArrowBigLeft, ArrowRight } from "lucide-react";
-import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import ReactHTMLParser from "react-html-parser";
 
 export default async function Home() {
   const post = await db.post.findMany();
   return (
-    <>
+    <div>
       <MaxWidthWrapper>
         {post.length > 0 ? (
           post.map((item, index) => (
-            <div>
+            <div key={index}>
               <BlogCard data={item} key={item.id} />
             </div>
           ))
@@ -31,6 +29,6 @@ export default async function Home() {
           </div>
         )}
       </MaxWidthWrapper>
-    </>
+    </div>
   );
 }
