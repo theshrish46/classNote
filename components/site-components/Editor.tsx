@@ -97,7 +97,7 @@ const Editor = ({ data }: TProps) => {
       >
         <Textarea
           name="title"
-          className="p-1 h-auto text-4xl font-semibold break-words border-none focus-visible:ring-offset-0 shadow-none placeholder:text-gray-400 scroll-smooth resize-none focus-visible:ring-0"
+          className="p-1 h-auto text-xl lg:text-4xl font-semibold break-words border-none focus-visible:ring-offset-0 shadow-none placeholder:text-gray-400 scroll-smooth resize-none focus-visible:ring-0"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -105,14 +105,14 @@ const Editor = ({ data }: TProps) => {
         <div className="w-full flex justify-between items-center">
           <Input
             name="author"
-            className="px-1 py-0 h-auto text-xl font-medium border-none shadow-none placeholder:text-gray-400 focus-visible:ring-offset-0 focus-visible:ring-0"
+            className="px-1 py-0 h-auto text-sm lg:text-xl font-medium border-none shadow-none placeholder:text-gray-400 focus-visible:ring-offset-0 focus-visible:ring-0"
             placeholder="Author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
           />
           <Input
             name="category"
-            className="ppx-1 py-0 h-auto text-xl font-medium border-none shadow-none placeholder:text-gray-400 focus-visible:ring-offset-0 focus-visible:ring-0"
+            className="ppx-1 py-0 h-auto text-sm lg:text-xl font-medium border-none shadow-none placeholder:text-gray-400 focus-visible:ring-offset-0 focus-visible:ring-0"
             placeholder="Category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
@@ -123,7 +123,7 @@ const Editor = ({ data }: TProps) => {
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="resize-none placeholder:text-gray-400 font-semibold focus-visible:ring-0 border-none focus-visible:ring-offset-0"
+          className="placeholder:text-gray-400 font-semibold focus-visible:ring-0 border-none focus-visible:ring-offset-0 text-sm lg:text-base resize-y"
         ></Textarea>
         <ReactQuill
           className={cn("border-none w-full")}

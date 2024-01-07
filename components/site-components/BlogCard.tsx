@@ -31,18 +31,20 @@ interface BlogCardProps {
 const BlogCard = ({ data }: BlogCardProps) => {
   return (
     <Link href={`/blog/${data.id}`} key={data.id}>
-      <Card className="cursor-pointer my-3 w-10/12 mx-auto h-38">
+      <Card className="cursor-pointer my-3 w-full mx-auto h-38">
         <CardHeader>
-          <CardTitle className="text-3xl my-1">{data.title}</CardTitle>
+          <CardTitle className="text-xl md:text-2xl my-1">
+            {data.title}
+          </CardTitle>
           <CardDescription className="text-base">
             {data.description.slice(0, 50)}...{" "}
-            <span className="text-indigo-500">read more</span>
+            <span className="text-gray-500">read more</span>
           </CardDescription>
         </CardHeader>
         <CardFooter className="flex justify-between items-center">
-          <p className="text-xl">{data.authorName}</p>
-          <p className="text-xl">{data.views}</p>
-          <p className="text-xl">{data.category}</p>
+          <p className="text-sm lg:text-base">{data.authorName}</p>
+          <p className="text-sm lg:text-base">{data.views}</p>
+          <p className="text-sm lg:text-base">{data.category}</p>
         </CardFooter>
       </Card>
     </Link>

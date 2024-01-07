@@ -7,6 +7,7 @@ import { Button, buttonVariants } from "../ui/button";
 import { cookies } from "next/headers";
 import { decodedToken } from "@/lib/jwt-token";
 import { logout } from "@/app/actions/auth-action";
+import MobileNav from "./MobileNav";
 
 const Navbar = async () => {
   const token = cookies().get("accessToken");
@@ -20,12 +21,16 @@ const Navbar = async () => {
               <div className="ml-4 flex lg:ml-0 justify-between w-full">
                 <Link
                   href={"/"}
-                  className="flex justify-center items-center gap-x-3 hover:text-blue-700 transition-all duration-150"
+                  className="flex justify-center items-center gap-x-1 md:gap-x-3 hover:text-blue-700 transition-all duration-150"
                 >
-                  <Icons.logo className="" />
-                  <p className="text-xl font-bold">classnote</p>
+                  <Icons.logo size={10} />
+                  <p className="text-sm font-bold">classnote</p>
                 </Link>
-                <div className="flex justify-center items-center gap-x-3">
+                <div className="flex justify-center items-center gap-x-2 md:hidden">
+                  <ModeToggle />
+                  <MobileNav />
+                </div>
+                <div className="hidden md:flex justify-center items-center gap-x-3">
                   <ModeToggle />
                   <Link
                     href={"/write"}

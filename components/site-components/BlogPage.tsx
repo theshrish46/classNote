@@ -51,37 +51,43 @@ const BlogPage = ({ data, decodedToken }: BlogPageProps) => {
           <Editor data={data} key={data.id} />
         </div>
       ) : (
-        <div className="my-12 flex flex-col gap-y-5 justify-center items-start">
-          <h1 className="text-5xl">{data.title}</h1>
-          <p className="text-lg text-muted-foreground">{data.description}</p>
+        <div className="my-12 flex flex-col gap-y-3 md:gap-y-5 justify-center items-start">
+          <h1 className="text-3xl md:text-5xl">{data.title}</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
+            {data.description}
+          </p>
 
           <div className="w-full flex justify-center items-center gap-x-3">
-            <p className="text-lg italic font-bold">{data.authorName}</p>
-            <p className="text-base text-muted-foreground font-bold">
+            <p className="text-sm lg:text-lg italic font-bold">
+              {data.authorName}
+            </p>
+            <p className="text-sm lg:text-lg text-muted-foreground font-bold">
               Published On :{" "}
               {createdMonthName + " " + createdDay + "," + createdYear + ""}
             </p>
           </div>
           <div className="w-full flex justify-center items-center gap-x-5">
-            <div className="hover:cursor-pointer flex justify-center items-center gap-x-1 text-xl">
-              <ThumbsUp size={22} />
+            <div className="hover:cursor-pointer flex justify-center items-center gap-x-1 text-base md:text-xl">
+              <ThumbsUp size={20} />
               {data.likes}
             </div>
-            <div className="hover:cursor-pointer flex justify-center items-center gap-x-1 text-xl">
-              <Eye size={22} />
+            <div className="hover:cursor-pointer flex justify-center items-center gap-x-1 text-base md:text-xl">
+              <Eye size={20} />
               {data.views}
             </div>
           </div>
 
-          <div className="text-lg dark:text-white">{parse(data.content)}</div>
-          <div className="w-full">
+          <div className="text-base md:text-lg dark:text-white">
+            {parse(data.content)}
+          </div>
+          <div className="w-full bg-gray-100">
             {comments &&
               comments.map((item: any) => (
                 <div
-                  className="bg-gray-300 my-2 py-2 px-2 w-full"
+                  className="my-2 py-2 px-2 w-full border-b-2 border-gray-300"
                   key={item.id}
                 >
-                  <div>{item.userName}</div>
+                  <div className="text-sm font-semibold">{item.userName}</div>
                   <div>{item.comment}</div>
                 </div>
               ))}
