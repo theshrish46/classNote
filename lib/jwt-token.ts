@@ -17,7 +17,7 @@ export function accessToken(id: string, name: string) {
     )
 }
 
-export function decodedToken(token: any) {
+export function decodedToken(token: string) {
     return jwt.verify(token, 'asdfadsf')
 }
 

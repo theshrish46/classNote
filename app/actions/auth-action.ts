@@ -50,7 +50,6 @@ export const login = async (formData: FormData) => {
     })
 
     const token = accessToken(userDoc?.id as string, userDoc?.name as string)
-    console.log(token)
     cookies().set('accessToken', token)
     redirect('/')
 }

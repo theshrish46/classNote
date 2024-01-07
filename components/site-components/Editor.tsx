@@ -73,7 +73,7 @@ const Editor = ({ data }: TProps) => {
       category,
       value,
     };
-    console.log(data.id);
+    console.log(data?.id);
     console.log(data);
     const url = data ? `/api/post/${data.id}` : "/api/post";
     const method = data ? "put" : "post";

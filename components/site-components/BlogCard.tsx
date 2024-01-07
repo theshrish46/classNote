@@ -30,7 +30,7 @@ interface BlogCardProps {
 
 const BlogCard = ({ data }: BlogCardProps) => {
   return (
-    <Link href={`/blog/${data.id}`} target="_blank" key={data.id}>
+    <Link href={`/blog/${data.id}`} key={data.id}>
       <Card className="cursor-pointer my-3 w-10/12 mx-auto h-38">
         <CardHeader>
           <CardTitle className="text-3xl my-1">{data.title}</CardTitle>
