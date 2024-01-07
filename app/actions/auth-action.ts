@@ -48,6 +48,8 @@ export const login = async (formData: FormData) => {
             id: existingUser?.id
         }
     })
+    console.log(userDoc)
+    console.log('userdoc.id', userDoc?.id)
 
     const token = accessToken(userDoc?.id as string, userDoc?.name as string)
     cookies().set('accessToken', token)
@@ -57,4 +59,5 @@ export const login = async (formData: FormData) => {
 export const logout = async () => {
     cookies().delete('accessToken')
     console.log('loggedout successfully')
+    redirect('/auth')
 }

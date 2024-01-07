@@ -18,6 +18,7 @@ export function accessToken(id: string, name: string) {
 }
 
 export function decodedToken(token: string) {
+    if (!token) return
     return jwt.verify(token, 'asdfadsf')
 }
 

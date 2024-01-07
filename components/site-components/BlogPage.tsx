@@ -2,7 +2,6 @@
 
 import Editor from "./Editor";
 import parse from "html-react-parser";
-import { JwtPayload } from "jsonwebtoken";
 import { Eye, ThumbsUp } from "lucide-react";
 import { redirect } from "next/navigation";
 export type BlogDataProps = {
@@ -18,6 +17,11 @@ export type BlogDataProps = {
   likedBy: string[];
   createdAt: Date;
   updatedAt: Date;
+};
+
+type JwtPayload = {
+  id: string;
+  name: string;
 };
 
 type BlogPageProps = {
