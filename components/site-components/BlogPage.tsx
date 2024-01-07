@@ -26,7 +26,7 @@ type JwtPayload = {
 
 type BlogPageProps = {
   data: BlogDataProps;
-  decodedToken: string | JwtPayload;
+  decodedToken: any;
 };
 
 const BlogPage = ({ data, decodedToken }: BlogPageProps) => {
