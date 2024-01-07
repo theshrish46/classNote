@@ -15,6 +15,7 @@ export type BlogDataProps = {
   likes: number;
   views: number;
   likedBy: string[];
+  comments: any;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -42,7 +43,7 @@ const BlogPage = ({ data, decodedToken }: BlogPageProps) => {
   if (!decodedToken) {
     redirect("/auth");
   }
-
+  const { comments } = data;
   return (
     <div>
       {decodedToken.id == data.authorId ? (
@@ -73,6 +74,18 @@ const BlogPage = ({ data, decodedToken }: BlogPageProps) => {
           </div>
 
           <div className="text-lg dark:text-white">{parse(data.content)}</div>
+          <div className="w-full">
+            {comments &&
+              comments.map((item: any) => (
+                <div
+                  className="bg-gray-300 my-2 py-2 px-2 w-full"
+                  key={item.id}
+                >
+                  <div>{item.userName}</div>
+                  <div>{item.comment}</div>
+                </div>
+              ))}
+          </div>
         </div>
       )}
     </div>

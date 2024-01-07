@@ -8,9 +8,8 @@ type JwtPayload = {
 }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
-    console.log(request)
     const reqId = params.id
-    // const { id } = request.query
+    
     const { title, author, category, description, value } = await request.json()
     console.log('id', reqId)
     const post = await db.post.findFirst({

@@ -1,4 +1,5 @@
 import BlogPage, { BlogDataProps } from "@/components/site-components/BlogPage";
+import Comment from "@/components/site-components/Comment";
 import MaxWidthWrapper from "@/components/site-components/MaxWidthWrapper";
 import { db } from "@/lib/db";
 import { decodedToken } from "@/lib/jwt-token";
@@ -13,10 +14,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
     where: {
       id: params.id,
     },
+    include: {
+      comments: true,
+    },
   });
 
+  // console.log(post);
+
   const token = cookies().get("accessToken");
-  const decoded = token
+  const decoded: any = token
     ? (decodedToken(token?.value as string) as JwtPayload)
     : null;
   return (
@@ -27,6 +33,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
           decodedToken={decoded as JwtPayload}
           key={post?.id}
         />
+        {decoded.id == post?.authorId ? null : (
+          <>
+            <Comment postId={params.id} decodedToken={decoded} />
+          </>
+        )}
       </MaxWidthWrapper>
     </>
   );
