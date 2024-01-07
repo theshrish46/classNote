@@ -10,7 +10,7 @@ import { logout } from "@/app/actions/auth-action";
 
 const Navbar = async () => {
   const token = cookies().get("accessToken");
-  const decoded = token ? decodedToken(token?.value) : null;
+  const decoded: any = token ? decodedToken(token?.value) : null;
   return (
     <div className="bg-white dark:bg-black sticky z-50 top-0 inset-x-0 h-16">
       <header className="relative bg-white dark:bg-black">
