@@ -22,10 +22,10 @@ export type BlogDataProps = {
 
 type BlogPageProps = {
   data: BlogDataProps;
-  token: string | JwtPayload;
+  decodedToken: string | JwtPayload;
 };
 
-const BlogPage = ({ data, token }: BlogPageProps) => {
+const BlogPage = ({ data, decodedToken }: BlogPageProps) => {
   const createdDateToString = data.updatedAt;
   const createdDate = new Date(createdDateToString);
 
@@ -35,13 +35,13 @@ const BlogPage = ({ data, token }: BlogPageProps) => {
     month: "short",
   });
   const createdDay = createdDate.getDate().toString().padEnd(1, "0");
-  if (!token) {
+  if (!decodedToken) {
     redirect("/auth");
   }
 
   return (
     <div>
-      {token.id == data.authorId ? (
+      {decodedToken.id == data.authorId ? (
         <div>
           <Editor data={data} key={data.id} />
         </div>
