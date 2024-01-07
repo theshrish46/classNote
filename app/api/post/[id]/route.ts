@@ -3,7 +3,7 @@ import { decodedToken } from "@/lib/jwt-token"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
-interface JwtPayload {
+type JwtPayload = {
     id: string
 }
 

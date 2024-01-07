@@ -1,11 +1,11 @@
 "use client";
 
-import { JwtPayload } from "jsonwebtoken";
 import Editor from "./Editor";
 import parse from "html-react-parser";
+import { JwtPayload } from "jsonwebtoken";
 import { Eye, ThumbsUp } from "lucide-react";
 import { redirect } from "next/navigation";
-interface BlogDataProps {
+export type BlogDataProps = {
   id: string;
   title: string;
   description: string;
@@ -18,12 +18,12 @@ interface BlogDataProps {
   likedBy: string[];
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
-interface BlogPageProps {
+type BlogPageProps = {
   data: BlogDataProps;
   token: string | JwtPayload;
-}
+};
 
 const BlogPage = ({ data, token }: BlogPageProps) => {
   const createdDateToString = data.updatedAt;
