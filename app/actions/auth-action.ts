@@ -12,48 +12,13 @@ export const register = async (formData: FormData) => {
     const email = formData.get('email')
     const password = formData.get('password')
 
-    const user = await db.user.findFirst()
-    if (user) {
-        console.log(user)
-    }
-
-    const hashedPassword = await hashPassword(password as string)
-    const userDoc = await db.user.create({
-        data: {
-            name: name as string,
-            email: email as string,
-            password: hashedPassword
-        }
-    })
-    redirect('/')
+    
 }
 
 export const login = async (formData: FormData) => {
     const email = formData.get('email')
     const password = formData.get('password')
-    const existingUser = await db.user.findFirst({
-        where: {
-            email: email as string
-        }
-    })
-    if (!existingUser) {
-        console.log('No user found')
-    }
-    const comparedPassword = await comparePassword(password as string, existingUser?.password as string)
-    if (!comparedPassword) {
-        console.log("Password didn't match")
-    }
-    const userDoc = await db.user.findFirst({
-        where: {
-            id: existingUser?.id
-        }
-    })
-    console.log(userDoc)
-    console.log('userdoc.id', userDoc?.id)
-
-    const token = accessToken(userDoc?.id as string, userDoc?.name as string)
-    cookies().set('accessToken', token)
-    redirect('/')
+    
 }
 
 export const logout = async () => {

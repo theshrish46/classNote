@@ -12,12 +12,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { login, register } from "../actions/auth-action";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import axios from "axios";
 
 const Page = () => {
   const [variant, setVariant] = useState("login");
@@ -26,6 +27,10 @@ const Page = () => {
       currentVariant === "login" ? "register" : "login"
     );
   }, []);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const formSchema = z.object({
     name: z.string(),
@@ -41,6 +46,22 @@ const Page = () => {
       password: "",
     },
   });
+
+  const url = variant == "register" ? "/api/register" : "api/login";
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("inside onsubmit");
+    try {
+      const response = await axios.post("http://localhost:3000/api/register", {
+        name,
+        email,
+        password,
+      });
+      const { data } = await response;
+      console.log(data);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
 
   return (
     <div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
@@ -61,7 +82,7 @@ const Page = () => {
           <Form {...form}>
             <form
               className="flex flex-col gap-y-3"
-              action={variant == "register" ? register : login}
+              onSubmit={form.handleSubmit(onSubmit)}
             >
               <div className="grid gap-2">
                 {variant == "register" && (
@@ -75,6 +96,8 @@ const Page = () => {
                           <Input
                             {...field}
                             className="focus-visible:ring-offset-0 dark:border-gray-600"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                           />
                         </FormControl>
                         <FormMessage />
@@ -92,6 +115,8 @@ const Page = () => {
                         <Input
                           {...field}
                           className="focus-visible:ring-offset-0 dark:border-gray-600"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                       </FormControl>
                       <FormMessage />
@@ -108,6 +133,8 @@ const Page = () => {
                         <Input
                           {...field}
                           className="focus-visible:ring-offset-0 dark:border-gray-600"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </FormControl>
                       <FormMessage />
@@ -125,7 +152,9 @@ const Page = () => {
             )}
             onClick={toggleVariant}
           >
-            Already have an account ?
+            {variant == "login"
+              ? "Create a new account"
+              : "Already have an account? Login"}
           </div>
         </div>
       </div>
