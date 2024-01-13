@@ -17,7 +17,7 @@ const Page = async ({ searchParams }: PageProps) => {
     : null;
   const user = await db.user.findFirst({
     where: {
-      id: decoded?.id as any,
+      id: decoded?.id as string,
     },
   });
   const token = searchParams.token;
