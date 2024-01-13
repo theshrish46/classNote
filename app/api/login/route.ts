@@ -4,12 +4,14 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 function exclude<User, Key extends keyof User>(
     user: User,
     keys: Key[]
 ): Omit<User, Key> {
     return Object.fromEntries(
-        Object.entries(user).filter(([key]) => !keys.includes(key))
+        Object.entries(user).filter(([key]: any): any => !keys.includes(key))
     )
 }
 
