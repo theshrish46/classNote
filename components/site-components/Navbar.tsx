@@ -14,7 +14,6 @@ import useUserStore from "@/lib/user-store";
 
 const Navbar = () => {
   const { user, setUser } = useUserStore();
-  console.log("user", user);
   return (
     <div className="bg-white dark:bg-black sticky z-50 top-0 inset-x-0 h-16">
       <header className="relative bg-white dark:bg-black">

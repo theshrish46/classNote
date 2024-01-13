@@ -25,20 +25,24 @@ export async function POST(request: Request) {
 
 
     const hashedPassword = await hashPassword(password as string)
+    const emailToken = accessToken(name, email)
     const userDoc = await db.user.create({
         data: {
             name: name as string,
             email: email as string,
-            password: hashedPassword
+            password: hashedPassword,
+            isVerified: false,
+            verificationToken: emailToken
         }
     })
-    const emailToken = accessToken(userDoc.id, userDoc.name)
+
     resend.emails.send({
         from: 'onboarding@resend.dev',
         to: email,
         subject: "classnote authorization your email",
         react: React.createElement(ContactFormEmail, {
-            token: emailToken as string
+            token: emailToken as string,
+            email: email as string
         })
     })
 

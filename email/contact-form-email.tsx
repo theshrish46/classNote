@@ -17,7 +17,13 @@ import { icons } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
-export default function ContactFormEmail({ token }: { token: string }) {
+export default function ContactFormEmail({
+  token,
+  email,
+}: {
+  token: string;
+  email: string;
+}) {
   return (
     <Html>
       <Body>
@@ -37,7 +43,9 @@ export default function ContactFormEmail({ token }: { token: string }) {
               "px-4 py-2 bg-blue-600 text-white font-semibold text-2xl"
             }
           >
-            <Link href={`http://localhost:3000/auth/${token}`}>
+            <Link
+              href={`http://localhost:3000/verify-email/?token=${token}&to=${email}`}
+            >
               Authorize email
             </Link>
           </Button>
