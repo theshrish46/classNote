@@ -4,6 +4,15 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
 
+function exclude<User, Key extends keyof User>(
+    user: User,
+    keys: Key[]
+): Omit<User, Key> {
+    return Object.fromEntries(
+        Object.entries(user).filter(([key]) => !keys.includes(key))
+    )
+}
+
 export async function POST(request: Request) {
     const { email, password } = await request.json()
     const existingUser = await db.user.findFirst({
@@ -23,11 +32,11 @@ export async function POST(request: Request) {
             id: existingUser?.id
         }
     })
+    const returnUser = exclude(userDoc, ['password'])
     console.log(userDoc)
     console.log('userdoc.id', userDoc?.id)
 
     const token = accessToken(userDoc?.id as string, userDoc?.name as string)
     cookies().set('accessToken', token)
-    redirect('/')
-    return NextResponse.json(userDoc)
+    return NextResponse.json(returnUser);
 }

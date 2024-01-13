@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { Icons } from "./Icons";
@@ -8,10 +10,11 @@ import { cookies } from "next/headers";
 import { decodedToken } from "@/lib/jwt-token";
 import { logout } from "@/app/actions/auth-action";
 import MobileNav from "./MobileNav";
+import useUserStore from "@/lib/user-store";
 
-const Navbar = async () => {
-  const token = cookies().get("accessToken");
-  const decoded: any = token ? decodedToken(token?.value) : null;
+const Navbar = () => {
+  const { user, setUser } = useUserStore();
+  console.log("user", user);
   return (
     <div className="bg-white dark:bg-black sticky z-50 top-0 inset-x-0 h-16">
       <header className="relative bg-white dark:bg-black">
@@ -26,6 +29,7 @@ const Navbar = async () => {
                   <Icons.logo size={10} />
                   <p className="text-sm font-bold">classnote</p>
                 </Link>
+                <div className="text-2xl">{user?.name}</div>
                 <div className="flex justify-center items-center gap-x-2 md:hidden">
                   <ModeToggle />
                   <MobileNav />
@@ -41,7 +45,7 @@ const Navbar = async () => {
                   >
                     Write
                   </Link>
-                  {decoded && decoded.id ? (
+                  {user && user.id ? (
                     <>
                       <form action={logout}>
                         <Button

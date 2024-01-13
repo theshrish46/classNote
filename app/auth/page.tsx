@@ -1,26 +1,26 @@
 "use client";
-import MaxWidthWrapper from "@/components/site-components/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { login, register } from "../actions/auth-action";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import axios from "axios";
+import { redirect } from "next/navigation";
+import useUserStore from "@/lib/user-store";
+import { formSchema } from "@/schemas/auth-form-schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Page = () => {
+  const { user, setUser } = useUserStore();
   const [variant, setVariant] = useState("login");
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
@@ -31,13 +31,6 @@ const Page = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const formSchema = z.object({
-    name: z.string(),
-    email: z.string(),
-    password: z.string(),
-  });
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,17 +44,21 @@ const Page = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("inside onsubmit");
     try {
-      const response = await axios.post("http://localhost:3000/api/register", {
+      const response = await axios.post(url, {
         name,
         email,
         password,
       });
       const { data } = await response;
-      console.log(data);
+      setUser(data);
     } catch (error) {
       console.log("Error", error);
     }
   };
+
+  if (user) {
+    redirect("/auth");
+  }
 
   return (
     <div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">

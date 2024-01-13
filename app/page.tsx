@@ -14,6 +14,7 @@ export default async function Home() {
   if (!token) {
     redirect("/auth");
   }
+
   return (
     <div>
       <MaxWidthWrapper>
