@@ -12,12 +12,12 @@ interface PageProps {
 
 const Page = async ({ searchParams }: PageProps) => {
   const cookieToken = cookies().get("accessToken");
-  const decoded = cookieToken
-    ? JSON.stringify(decodedToken(cookieToken?.value))
+  const decoded: any = cookieToken
+    ? decodedToken(cookieToken?.value as string)
     : null;
   const user = await db.user.findFirst({
     where: {
-      id: decoded?.id as string,
+      id: decoded?.id,
     },
   });
   const token = searchParams.token;
