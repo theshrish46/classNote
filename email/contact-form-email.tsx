@@ -44,7 +44,7 @@ export default function ContactFormEmail({
             }
           >
             <Link
-              href={`http://localhost:3000/verify-email/?token=${token}&to=${email}`}
+              href={`https://classnote-project.vercel.app/verify-email/?token=${token}&to=${email}`}
             >
               Authorize email
             </Link>
