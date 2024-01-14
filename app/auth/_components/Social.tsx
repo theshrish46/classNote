@@ -1,10 +1,16 @@
-import { Car } from "lucide-react";
+"use client";
+import { signIn } from "next-auth/react";
 
+import { Car, Github, GithubIcon, LucideGithub } from "lucide-react";
 import { Button } from "../../../components/ui/button";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export const Social = () => {
   const onClick = (provider: "google" | "github") => {
-    console.log("google");
+    console.log(provider);
+    signIn(provider, {
+      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+    });
   };
   return (
     <div className="flex items-center gap-x-2 w-full">
@@ -22,7 +28,7 @@ export const Social = () => {
         variant="outline"
         onClick={() => onClick("github")}
       >
-        <Car />
+        <GithubIcon />
       </Button>
     </div>
   );

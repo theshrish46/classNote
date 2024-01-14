@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
 import { cookies } from "next/headers";
 import { decodedToken } from "@/lib/jwt-token";
-// import { logout } from "@/app/actions/auth-action";
 import MobileNav from "./MobileNav";
 import useUserStore from "@/lib/user-store";
 import { LogOutButton } from "./log-out-button";
+import { auth } from "@/auth";
 
 const Navbar = () => {
   const { user, setUser } = useUserStore();
@@ -45,13 +45,13 @@ const Navbar = () => {
                   >
                     Write
                   </Link>
-                  {user && user.id ? (
+                  {1 && 1 ? (
                     <>
                       <LogOutButton />
                     </>
                   ) : (
                     <Link
-                      href={"/auth"}
+                      href={"/auth/login"}
                       className={cn(
                         buttonVariants({
                           size: "sm",

@@ -1,14 +1,10 @@
 import { signOut } from "@/auth";
 import { Button } from "../ui/button";
+import { logout } from "@/actions/logout";
 
 export const LogOutButton = () => {
   return (
-    <form
-      action={async () => {
-        "use server";
-        await signOut();
-      }}
-    >
+    <form action={logout}>
       <Button type="submit">Logout</Button>
     </form>
   );

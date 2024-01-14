@@ -6,11 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 const Page = () => {
-  const token = cookies().get("accessToken");
-  const decoded = token ? decodedToken(token.value) : null;
-  if (!token) {
-    redirect("/auth");
-  }
+  
   return (
     <MaxWidthWrapper className="container">
       <Editor />

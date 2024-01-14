@@ -9,21 +9,23 @@ export async function GET() {
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
     console.log('route has been hit')
-    const { comment, decodedToken } = await request.json()
+    const { commentText, decodedToken } = await request.json()
     const postId = params.id
     const userName = decodedToken.name
+    const userId = decodedToken.id
+    console.log(decodedToken)
 
     const commentDoc = await db.comment.create({
         data: {
-            comment: comment as string,
+            comment: commentText as string,
             post: {
                 connect: {
                     id: postId
                 }
             },
-            user: {
+            User: {
                 connect: {
-                    name: userName
+                    id: decodedToken.id
                 }
             }
         }

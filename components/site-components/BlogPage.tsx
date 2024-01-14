@@ -40,9 +40,7 @@ const BlogPage = ({ data, decodedToken }: BlogPageProps) => {
     month: "short",
   });
   const createdDay = createdDate.getDate().toString().padEnd(1, "0");
-  if (!decodedToken) {
-    redirect("/auth");
-  }
+
   const { comments } = data;
   return (
     <div>

@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import BlogCard from "@/components/site-components/BlogCard";
 import MaxWidthWrapper from "@/components/site-components/MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
@@ -9,15 +10,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
-  const token = cookies().get("accessToken");
+  const sesstion = await auth();
   const post = await db.post.findMany();
-  if (!token) {
-    redirect("/auth");
-  }
-
   return (
     <div>
       <MaxWidthWrapper>
+        {JSON.stringify(sesstion)}
         {post.length > 0 ? (
           post.map((item, index) => (
             <div key={index}>

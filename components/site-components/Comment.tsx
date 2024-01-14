@@ -4,19 +4,23 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 
+import { comment } from "@/actions/comment";
+
 type CommentPageProps = {
   postId: string;
   decodedToken: any;
 };
 
 const Comment = ({ postId, decodedToken }: CommentPageProps) => {
-  const [comment, setComment] = useState("");
+  const [commentText, setComment] = useState("");
+
   async function commentHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const res = await axios.post(`/api/comment/${postId}`, {
-      comment,
+      commentText,
       decodedToken,
     });
+    comment(commentText, postId)
     console.log(res);
     const { data } = await res;
     console.log("data", data);
@@ -27,7 +31,7 @@ const Comment = ({ postId, decodedToken }: CommentPageProps) => {
         <div className="flex flex-col justify-center items-start gap-y-3">
           <Textarea
             className="resize-none focus-visible:ring-0 ring-1 ring-offset-1 ring-offset-gray-400 border-none"
-            value={comment}
+            value={commentText}
             onChange={(e) => setComment(e.target.value)}
           ></Textarea>
           <Button type="submit">Comment</Button>

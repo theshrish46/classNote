@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import axios, { Method } from "axios";
+import { writeBlog } from "@/actions/post";
 
 type DataProps = {
   _id: string;
@@ -66,6 +67,7 @@ const Editor = ({ data }: TProps) => {
   async function handler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("value", value);
+    writeBlog(title, author, category, description, value);
     const postData = {
       title,
       author,

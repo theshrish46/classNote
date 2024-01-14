@@ -5,8 +5,6 @@ import { NextResponse } from "next/server"
 import React from "react";
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function GET() {
     return new NextResponse('ok')
 }

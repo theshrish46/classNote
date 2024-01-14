@@ -1,4 +1,5 @@
 
+import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { decodedToken } from "@/lib/jwt-token";
 import { cookies } from "next/headers";
@@ -9,19 +10,10 @@ type JwtPayload = {
 }
 
 export async function POST(request: Request, response: Response) {
+    const session = await auth()
     const { title, author, category, description, value } = await request.json()
 
     console.log(title, category, author, description, value)
-    const token = cookies().get('accessToken')
-    const decoded = decodedToken(token?.value as string) as JwtPayload
-
-    const objectId = decoded.id
-    console.log('objectid', objectId)
-    const user = await db.user.findFirst({
-        where: {
-            id: decoded.id
-        }
-    })
 
     const post = await db.post.create({
         data: {
@@ -32,7 +24,7 @@ export async function POST(request: Request, response: Response) {
             content: value,
             author: {
                 connect: {
-                    id: user?.id
+                    id: session?.user.id
                 }
             }
         }
