@@ -1,8 +1,6 @@
-import ContactFormEmail from "@/email/contact-form-email";
 import { db } from "@/lib/db"
-import { emailTemplate } from "@/lib/email";
+import ContactFormEmail from "@/email/contact-form-email";
 import { accessToken, hashPassword } from "@/lib/jwt-token"
-import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
 import React from "react";
 import { Resend } from 'resend'
@@ -20,10 +18,6 @@ export async function POST(request: Request) {
     if (user) {
         console.log(user)
     }
-
-    // const populatedEmailTemplate = emailTemplate.replace(/{{username}}/g, name)
-
-
     const hashedPassword = await hashPassword(password as string)
     const emailToken = accessToken(name, email)
     const userDoc = await db.user.create({
@@ -45,7 +39,5 @@ export async function POST(request: Request) {
             email: email as string
         })
     })
-
-    // redirect('/')
     return NextResponse.json(userDoc)
 }
