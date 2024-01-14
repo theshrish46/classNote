@@ -1,10 +1,9 @@
-import { auth } from "@/auth";
-import BlogPage, { BlogDataProps } from "@/components/site-components/BlogPage";
+"use server";
+import BlogPage from "@/components/site-components/BlogPage";
 import Comment from "@/components/site-components/Comment";
 import MaxWidthWrapper from "@/components/site-components/MaxWidthWrapper";
 import { db } from "@/lib/db";
-import { decodedToken } from "@/lib/jwt-token";
-import { cookies } from "next/headers";
+import { currentServerUser } from "@/hooks/use-server-user";
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const post = await db.post.findFirst({
@@ -15,20 +14,21 @@ const Page = async ({ params }: { params: { id: string } }) => {
       comments: true,
     },
   });
+  if (!post) {
+    return { error: "No Posts available" };
+  }
 
-  // console.log(post);
-  const session = await auth();
+  const user = await currentServerUser();
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
   return (
     <>
       <MaxWidthWrapper className="container">
-        <BlogPage
-          data={post as BlogDataProps}
-          decodedToken={session?.user}
-          key={post?.id}
-        />
-        {session?.user.id == post?.authorId ? null : (
+        <BlogPage data={post} user={user} key={post?.id} />
+        {user.id == post?.authorId ? null : (
           <>
-            <Comment postId={params.id} decodedToken={session?.user} />
+            <Comment postId={params.id} decodedToken={user} />
           </>
         )}
       </MaxWidthWrapper>

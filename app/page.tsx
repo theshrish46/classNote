@@ -5,17 +5,15 @@ import { buttonVariants } from "@/components/ui/button";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-import { cookies } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { currentServerUser } from "@/hooks/use-server-user";
 
 export default async function Home() {
-  const sesstion = await auth();
+  const user = await currentServerUser();
   const post = await db.post.findMany();
   return (
     <div>
       <MaxWidthWrapper>
-        {JSON.stringify(sesstion)}
         {post.length > 0 ? (
           post.map((item, index) => (
             <div key={index}>

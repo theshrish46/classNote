@@ -7,7 +7,7 @@ import { useState, useTransition } from "react";
 
 // Schemas and server actions
 import { LoginSchema } from "@/schemas";
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth-actions/login";
 
 // Components
 import { CardWrapper } from "../../_components/CardWrapper";

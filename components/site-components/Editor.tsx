@@ -22,8 +22,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import axios, { Method } from "axios";
-import { writeBlog } from "@/actions/post";
+import { writeBlog } from "@/actions/post-actions/post";
+import { toast } from "sonner";
+import { updateBlog } from "@/actions/post-actions/updatepost";
 
 type DataProps = {
   _id: string;
@@ -48,15 +49,6 @@ type TProps = {
 };
 
 const Editor = ({ data }: TProps) => {
-  // TODO: Make selector type safe
-  type User = {
-    id: string | null;
-    name: string | null;
-    email: string | null;
-    accessToken: string | null;
-    refreshToken: string | null;
-  };
-
   const [title, setTitle] = useState(data?.title);
   const [author, setAuthor] = useState(data?.authorName);
   const [category, setCategory] = useState(data?.category);
@@ -67,27 +59,32 @@ const Editor = ({ data }: TProps) => {
   async function handler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("value", value);
-    writeBlog(title, author, category, description, value);
-    const postData = {
-      title,
-      author,
-      description,
-      category,
-      value,
-    };
-    console.log(data?.id);
-    console.log(data);
-    const url = data ? `/api/post/${data.id}` : "/api/post";
-    const method = data ? "put" : "post";
-
-    const res = await axios({
-      method: method as Method,
-      url: url,
-      data: postData,
-    });
-    console.log(res);
-    console.log(res.data);
-
+    if (data) {
+      updateBlog(data.id, title, author, category, description, value)
+        .then((data) => {
+          if (data.success) {
+            toast.success(data.success);
+          }
+          if (data.error) {
+            toast.error(data.error);
+          }
+        })
+        .catch((error) => {
+          console.log("Error while updating the post in catch block", error);
+        });
+    }
+    writeBlog(title, author, category, description, value)
+      .then((data) => {
+        if (data.success) {
+          toast.success(data.success);
+        }
+        if (data.error) {
+          toast.error(data.error);
+        }
+      })
+      .catch((error) => {
+        console.log("Error while writing blog in catch block", error);
+      });
     router.push("/");
   }
 

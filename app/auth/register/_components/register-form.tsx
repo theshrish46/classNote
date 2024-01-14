@@ -7,7 +7,7 @@ import { useState, useTransition } from "react";
 
 // Schemas and server actions
 import { RegisterSchema } from "@/schemas";
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth-actions/login";
 
 // Components
 import { CardWrapper } from "../../_components/CardWrapper";
@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/app/auth/_components/form-error";
 import { FormSuccess } from "@/app/auth/_components/form-success";
-import { register } from "@/actions/register";
+import { register } from "@/actions/auth-actions/register";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");

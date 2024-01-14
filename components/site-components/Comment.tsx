@@ -4,7 +4,8 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 
-import { comment } from "@/actions/comment";
+import { comment } from "@/actions/comment-actions/comment";
+import { toast } from "sonner";
 
 type CommentPageProps = {
   postId: string;
@@ -16,14 +17,15 @@ const Comment = ({ postId, decodedToken }: CommentPageProps) => {
 
   async function commentHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const res = await axios.post(`/api/comment/${postId}`, {
-      commentText,
-      decodedToken,
-    });
     comment(commentText, postId)
-    console.log(res);
-    const { data } = await res;
-    console.log("data", data);
+      .then((data) => {
+        console.log(data);
+        if (data.success) toast.success(data.success);
+        if (data.error) toast.error(data.error);
+      })
+      .catch((error) => {
+        console.log("Catch errors", error);
+      });
   }
   return (
     <div className="my-6">

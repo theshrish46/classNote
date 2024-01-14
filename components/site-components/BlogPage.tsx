@@ -1,50 +1,75 @@
 "use client";
 
+import { Post } from "@prisma/client";
 import Editor from "./Editor";
 import parse from "html-react-parser";
 import { Eye, ThumbsUp } from "lucide-react";
 import { redirect } from "next/navigation";
-export type BlogDataProps = {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  content: string;
-  authorName: string;
-  authorId: string;
-  likes: number;
-  views: number;
-  likedBy: string[];
-  comments: any;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-type JwtPayload = {
-  id: string;
-  name: string;
-};
-
+import { Button } from "../ui/button";
+import React, { useCallback, useEffect, useState } from "react";
+import { handleLike } from "@/actions/like-actions/handlelike";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { viewsAction } from "@/actions/view-actions/view-action";
 type BlogPageProps = {
-  data: BlogDataProps;
-  decodedToken: any;
+  data: Post;
+  user: any;
 };
 
-const BlogPage = ({ data, decodedToken }: BlogPageProps) => {
+const BlogPage = ({ data, user }: BlogPageProps) => {
+  const [liked, setLiked] = useState(data.likedBy.includes(user.id));
+  const view = localStorage.setItem("viewd", "true");
+
+  console.log("initial like", liked);
+
+  const toggleLike = useCallback(() => {
+    setLiked((prev) => !prev);
+  }, []);
+
   const createdDateToString = data.updatedAt;
   const createdDate = new Date(createdDateToString);
 
   const createdYear = createdDate.getFullYear();
-  const createdMonth = (createdDate.getMonth() + 1).toString().padStart(2, "0");
   const createdMonthName = createdDate.toLocaleDateString("default", {
     month: "short",
   });
   const createdDay = createdDate.getDate().toString().padEnd(1, "0");
 
-  const { comments } = data;
+  const { comments }: any = data;
+  if (!comments) {
+    return null;
+  }
+
+  useEffect(() => {
+    
+  }, []);
+
+  const onSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    console.log("before toggling", liked);
+
+    toggleLike();
+
+    console.log("before sending to the actions and after toggling", liked);
+    handleLike(!liked, data.id)
+      .then((data) => {
+        if (data.success) {
+          toast.success(data.success);
+        }
+        if (data.error) {
+          toast.error(data.error);
+        }
+      })
+      .catch((error) => {
+        console.log("Inside the catch blog of like handling", error);
+      });
+  };
+
   return (
     <div>
-      {decodedToken.id == data.authorId ? (
+      <div>{user.id}</div>
+      <div>{data.authorId}</div>
+      {user.id == data.authorId ? (
         <div>
           <Editor data={data} key={data.id} />
         </div>
@@ -65,10 +90,19 @@ const BlogPage = ({ data, decodedToken }: BlogPageProps) => {
             </p>
           </div>
           <div className="w-full flex justify-center items-center gap-x-5">
-            <div className="hover:cursor-pointer flex justify-center items-center gap-x-1 text-base md:text-xl">
-              <ThumbsUp size={20} />
-              {data.likes}
-            </div>
+            <form onSubmit={onSubmit}>
+              <Button
+                type="submit"
+                variant={"ghost"}
+                className={cn(
+                  liked === true ? "text-pink-700" : "text-pink-300",
+                  "hover:cursor-pointer hover:bg-transparent flex justify-center items-center gap-x-1 text-base md:text-xl"
+                )}
+              >
+                <ThumbsUp size={20} />
+                {data.likes}
+              </Button>
+            </form>
             <div className="hover:cursor-pointer flex justify-center items-center gap-x-1 text-base md:text-xl">
               <Eye size={20} />
               {data.views}

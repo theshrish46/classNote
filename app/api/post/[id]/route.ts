@@ -1,6 +1,5 @@
+import { currentServerUser } from "@/hooks/use-server-user"
 import { db } from "@/lib/db"
-import { decodedToken } from "@/lib/jwt-token"
-import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
 type JwtPayload = {
@@ -9,7 +8,7 @@ type JwtPayload = {
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
     const reqId = params.id
-    
+
     const { title, author, category, description, value } = await request.json()
     console.log('id', reqId)
     const post = await db.post.findFirst({
@@ -20,11 +19,10 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (!post) {
         console.log('No post available for this id')
     }
-    const token = cookies().get('accessToken')
-    const decoded = decodedToken(token?.value as string) as JwtPayload
-    const user = await db.user.findFirst({
+    const user = await currentServerUser()
+    const existingUser = await db.user.findFirst({
         where: {
-            id: decoded.id
+            id: user?.id
         }
     })
     console.log(user)
@@ -40,7 +38,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             content: value,
             author: {
                 connect: {
-                    id: user?.id
+                    id: existingUser?.id
                 }
             }
         }

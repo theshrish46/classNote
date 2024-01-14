@@ -1,13 +1,8 @@
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { decodedToken } from "@/lib/jwt-token";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-type JwtPayload = {
-    id: string
-}
 
 export async function POST(request: Request, response: Response) {
     const session = await auth()

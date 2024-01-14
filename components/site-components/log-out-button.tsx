@@ -1,6 +1,6 @@
 import { signOut } from "@/auth";
 import { Button } from "../ui/button";
-import { logout } from "@/actions/logout";
+import { logout } from "@/actions/auth-actions/logout";
 
 export const LogOutButton = () => {
   return (
