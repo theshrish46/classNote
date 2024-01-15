@@ -148,7 +148,8 @@ const BlogPage = ({ data, comments, user }: BlogPageProps) => {
           <div className="text-base md:text-lg dark:text-white">
             {parse(data.content)}
           </div>
-          // Comment Component
+
+          {/* Comment Section */}
           <div className={"w-full bg-primary/10 rounded-lg p-2"}>
             {comments &&
               comments.map((item: any) => (
