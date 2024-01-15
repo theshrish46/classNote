@@ -45,8 +45,8 @@ const BlogPage = ({ data, comments, user }: BlogPageProps) => {
           console.log("Inside the catch block of view actions", error);
         });
     }
-  }, [viewed, hasViewedLocalStorage]);
-  
+  }, [viewed, hasViewedLocalStorage, data.id]);
+
   localStorage.setItem("hasViewed", "false");
 
   const createdDateToString = data.updatedAt;
@@ -61,7 +61,6 @@ const BlogPage = ({ data, comments, user }: BlogPageProps) => {
   if (!comments) {
     return null;
   }
-
 
   const onLikeHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
