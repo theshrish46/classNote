@@ -4,7 +4,6 @@ import { currentServerUser } from "@/hooks/use-server-user"
 import { db } from "@/lib/db"
 
 export const handleLike = async (liked: boolean, postId: string) => {
-    console.log("Inside the like action", liked)
     const user = await currentServerUser()
     if (!user) {
         return { error: "No user found" }
@@ -34,8 +33,8 @@ export const handleLike = async (liked: boolean, postId: string) => {
         }
         return { success: "Successfully liked the post" }
     } else {
-        console.log("inside the dislike action", liked)
-        if (postLikes.likes <= 0) {
+        const likeCount = postLikes.likes
+        if (likeCount as number <= 0) {
             return { error: "Cannot dislike" }
         }
         const post = await db.post.update({
