@@ -21,26 +21,12 @@ type BlogPageProps = {
 const BlogPage = ({ data, comments, user }: BlogPageProps) => {
   const [liked, setLiked] = useState(data.likedBy.includes(user.id));
 
+  const [viewed, setViewed] = useState(false);
+  const hasViewedLocalStorage = localStorage.getItem("hasViewed");
+
   const toggleLike = useCallback(() => {
     setLiked((prev) => !prev);
   }, []);
-
-  const createdDateToString = data.updatedAt;
-  const createdDate = new Date(createdDateToString);
-
-  const createdYear = createdDate.getFullYear();
-  const createdMonthName = createdDate.toLocaleDateString("default", {
-    month: "short",
-  });
-  const createdDay = createdDate.getDate().toString().padEnd(1, "0");
-
-  if (!comments) {
-    return null;
-  }
-
-  localStorage.setItem("hasViewed", "false");
-  const hasViewedLocalStorage = localStorage.getItem("hasViewed");
-  const [viewed, setViewed] = useState(false);
 
   useEffect(() => {
     if (!viewed && hasViewedLocalStorage == "false") {
@@ -60,6 +46,22 @@ const BlogPage = ({ data, comments, user }: BlogPageProps) => {
         });
     }
   }, [viewed, hasViewedLocalStorage]);
+  
+  localStorage.setItem("hasViewed", "false");
+
+  const createdDateToString = data.updatedAt;
+  const createdDate = new Date(createdDateToString);
+
+  const createdYear = createdDate.getFullYear();
+  const createdMonthName = createdDate.toLocaleDateString("default", {
+    month: "short",
+  });
+  const createdDay = createdDate.getDate().toString().padEnd(1, "0");
+
+  if (!comments) {
+    return null;
+  }
+
 
   const onLikeHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
