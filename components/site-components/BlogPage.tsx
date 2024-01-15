@@ -18,9 +18,8 @@ type BlogPageProps = {
 
 const BlogPage = ({ data, user }: BlogPageProps) => {
   const [liked, setLiked] = useState(data.likedBy.includes(user.id));
-  const view = localStorage.setItem("viewd", "true");
-
-  console.log("initial like", liked);
+  const [viewed, setViewed] = useState("false");
+  localStorage.setItem("viewd", "true");
 
   const toggleLike = useCallback(() => {
     setLiked((prev) => !prev);
@@ -40,9 +39,24 @@ const BlogPage = ({ data, user }: BlogPageProps) => {
     return null;
   }
 
-  useEffect(() => {
-    
-  }, []);
+  const hasViewedLocalStorage = localStorage.getItem("hasViewed");
+
+  if (!hasViewedLocalStorage) {
+    viewsAction("true", data.id)
+      .then((data) => {
+        if (data.success) {
+          console.log(data.success);
+          localStorage.setItem("hasViewed", "true");
+          setViewed("true");
+        }
+        if (data.error) {
+          console.log(data.error);
+        }
+      })
+      .catch((error) => {
+        console.log("Inside the catch block of view actions", error);
+      });
+  }
 
   const onSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
