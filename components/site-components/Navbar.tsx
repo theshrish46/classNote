@@ -46,7 +46,7 @@ const Navbar = async () => {
                   >
                     Write
                   </Link>
-                  {1 && 1 ? (
+                  {user ? (
                     <>
                       <LogOutButton />
                     </>
