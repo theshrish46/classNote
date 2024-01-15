@@ -19,10 +19,9 @@ export const NavBarComponent = ({ user }: { user: any }) => {
               <Icons.logo size={10} />
               <p className="text-sm font-bold">classnote</p>
             </Link>
-            <div className="text-2xl">{user?.name}</div>
             <div className="flex justify-center items-center gap-x-2 md:hidden">
               <ModeToggle />
-              <MobileNav />
+              <MobileNav user={user}/>
             </div>
             <div className="hidden md:flex justify-center items-center gap-x-3">
               <ModeToggle />

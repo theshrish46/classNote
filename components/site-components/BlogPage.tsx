@@ -117,7 +117,6 @@ const BlogPage = ({ data, comments, user }: BlogPageProps) => {
           <p className="text-sm md:text-base text-muted-foreground">
             {data.description}
           </p>
-
           <div className="w-full flex justify-center items-center gap-x-3">
             <p className="text-sm lg:text-lg italic font-bold">
               {capitalizeWords(data.authorName)}
@@ -146,33 +145,35 @@ const BlogPage = ({ data, comments, user }: BlogPageProps) => {
               {data.views}
             </div>
           </div>
-
           <div className="text-base md:text-lg dark:text-white">
             {parse(data.content)}
           </div>
-          <div className="w-full bg-primary-foreground rounded-lg p-2">
+          // Comment Component
+          <div className={"w-full bg-primary/10 rounded-lg p-2"}>
             {comments &&
               comments.map((item: any) => (
                 <div
                   className="my-2 py-2 px-2 w-full border-b-[1px] border-gray-300 flex justify-between items-center"
                   key={item.id}
                 >
-                  <div>
+                  <div className="flex flex-col justify-start items-start gap-y-1 w-full">
                     <div className="text-sm font-semibold">
-                      {capitalizeWords(item.userName)}
+                      {item.userName ? capitalizeWords(item.userName) : item.id}
                     </div>
                     <div>{item.comment}</div>
                   </div>
                   <div>
-                    <Button
-                      onClick={(e) => deleteCommentHandler(item.id, e)}
-                      type="submit"
-                      variant={"ghost"}
-                      size={"sm"}
-                      className="p-1"
-                    >
-                      <Trash2 size={15} />
-                    </Button>
+                    {user.id == item.userId && (
+                      <Button
+                        onClick={(e) => deleteCommentHandler(item.id, e)}
+                        type="submit"
+                        variant={"ghost"}
+                        size={"sm"}
+                        className="p-1 text-destructive"
+                      >
+                        <Trash2 size={18} />
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}

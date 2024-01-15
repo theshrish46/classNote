@@ -12,7 +12,7 @@ import { NavBarComponent } from "./NavBarComponent";
 const Navbar = async () => {
   const user = await currentServerUser();
   if (!user) {
-    console.log("No user presentF");
+    console.log("no loginned user");
   }
 
   return (

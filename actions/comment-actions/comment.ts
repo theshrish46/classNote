@@ -23,7 +23,8 @@ export const comment = async (comment: string, postId: string) => {
         data: {
             comment: comment,
             postId: postId,
-            userName: user.name as string
+            userId: user.id,
+            userName: user.name
         }
     })
     if (!newComment) {
