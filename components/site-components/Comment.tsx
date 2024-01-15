@@ -12,7 +12,7 @@ type CommentPageProps = {
   decodedToken: any;
 };
 
-const Comment = ({ postId, decodedToken }: CommentPageProps) => {
+const CommentBox = ({ postId, decodedToken }: CommentPageProps) => {
   const [commentText, setComment] = useState("");
 
   async function commentHandler(e: React.FormEvent<HTMLFormElement>) {
@@ -43,4 +43,4 @@ const Comment = ({ postId, decodedToken }: CommentPageProps) => {
   );
 };
 
-export default Comment;
+export default CommentBox;

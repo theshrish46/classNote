@@ -1,25 +1,25 @@
 "use client";
 
-import { Post } from "@prisma/client";
+import { Comment, Post } from "@prisma/client";
 import Editor from "./Editor";
 import parse from "html-react-parser";
-import { Eye, ThumbsUp } from "lucide-react";
-import { redirect } from "next/navigation";
+import { Eye, ThumbsUp, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import React, { useCallback, useEffect, useState } from "react";
 import { handleLike } from "@/actions/like-actions/handlelike";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { viewsAction } from "@/actions/view-actions/view-action";
+import { deleteComment } from "@/actions/comment-actions/comment";
+
 type BlogPageProps = {
   data: Post;
+  comments?: Array<Comment>;
   user: any;
 };
 
-const BlogPage = ({ data, user }: BlogPageProps) => {
+const BlogPage = ({ data, comments, user }: BlogPageProps) => {
   const [liked, setLiked] = useState(data.likedBy.includes(user.id));
-  const [viewed, setViewed] = useState("false");
-  localStorage.setItem("viewd", "true");
 
   const toggleLike = useCallback(() => {
     setLiked((prev) => !prev);
@@ -34,33 +34,35 @@ const BlogPage = ({ data, user }: BlogPageProps) => {
   });
   const createdDay = createdDate.getDate().toString().padEnd(1, "0");
 
-  const { comments }: any = data;
   if (!comments) {
     return null;
   }
 
+  localStorage.setItem("hasViewed", "false");
   const hasViewedLocalStorage = localStorage.getItem("hasViewed");
+  const [viewed, setViewed] = useState(false);
 
-  if (!hasViewedLocalStorage) {
-    viewsAction("true", data.id)
-      .then((data) => {
-        if (data.success) {
-          console.log(data.success);
+  useEffect(() => {
+    if (!viewed && hasViewedLocalStorage == "false") {
+      viewsAction("true", data.id)
+        .then((data) => {
+          if (data.success) {
+            console.log(data.success);
+          }
+          if (data.error) {
+            console.log(data.error);
+          }
+          setViewed(true);
           localStorage.setItem("hasViewed", "true");
-          setViewed("true");
-        }
-        if (data.error) {
-          console.log(data.error);
-        }
-      })
-      .catch((error) => {
-        console.log("Inside the catch block of view actions", error);
-      });
-  }
+        })
+        .catch((error) => {
+          console.log("Inside the catch block of view actions", error);
+        });
+    }
+  }, [viewed, hasViewedLocalStorage]);
 
-  const onSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onLikeHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log("before toggling", liked);
 
     toggleLike();
 
@@ -79,6 +81,29 @@ const BlogPage = ({ data, user }: BlogPageProps) => {
       });
   };
 
+  const deleteCommentHandler = async (
+    id: string,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    deleteComment(id)
+      .then((data) => {
+        if (data.success) {
+          toast.success(data.success);
+        }
+        if (data.error) {
+          toast.error(data.error);
+        }
+      })
+      .catch((error) => {
+        console.log("Inside the delete comment handler catch block", error);
+      });
+  };
+
+  function capitalizeWords(inputString: string) {
+    return inputString.replace(/\b\w/g, (match) => match.toUpperCase());
+  }
+
   return (
     <div>
       <div>{user.id}</div>
@@ -96,7 +121,7 @@ const BlogPage = ({ data, user }: BlogPageProps) => {
 
           <div className="w-full flex justify-center items-center gap-x-3">
             <p className="text-sm lg:text-lg italic font-bold">
-              {data.authorName}
+              {capitalizeWords(data.authorName)}
             </p>
             <p className="text-sm lg:text-lg text-muted-foreground font-bold">
               Published On :{" "}
@@ -104,19 +129,19 @@ const BlogPage = ({ data, user }: BlogPageProps) => {
             </p>
           </div>
           <div className="w-full flex justify-center items-center gap-x-5">
-            <form onSubmit={onSubmit}>
-              <Button
-                type="submit"
-                variant={"ghost"}
-                className={cn(
-                  liked === true ? "text-pink-700" : "text-pink-300",
-                  "hover:cursor-pointer hover:bg-transparent flex justify-center items-center gap-x-1 text-base md:text-xl"
-                )}
-              >
-                <ThumbsUp size={20} />
-                {data.likes}
-              </Button>
-            </form>
+            <Button
+              onClick={(e) => onLikeHandler(e)}
+              type="submit"
+              variant={"ghost"}
+              className={cn(
+                liked === true ? "text-pink-700" : "text-pink-300",
+                "hover:cursor-pointer hover:bg-transparent flex justify-center items-center gap-x-1 text-base md:text-xl"
+              )}
+            >
+              <ThumbsUp size={20} />
+              {data.likes}
+            </Button>
+
             <div className="hover:cursor-pointer flex justify-center items-center gap-x-1 text-base md:text-xl">
               <Eye size={20} />
               {data.views}
@@ -126,15 +151,30 @@ const BlogPage = ({ data, user }: BlogPageProps) => {
           <div className="text-base md:text-lg dark:text-white">
             {parse(data.content)}
           </div>
-          <div className="w-full bg-gray-100">
+          <div className="w-full bg-primary-foreground rounded-lg p-2">
             {comments &&
               comments.map((item: any) => (
                 <div
-                  className="my-2 py-2 px-2 w-full border-b-2 border-gray-300"
+                  className="my-2 py-2 px-2 w-full border-b-[1px] border-gray-300 flex justify-between items-center"
                   key={item.id}
                 >
-                  <div className="text-sm font-semibold">{item.userName}</div>
-                  <div>{item.comment}</div>
+                  <div>
+                    <div className="text-sm font-semibold">
+                      {capitalizeWords(item.userName)}
+                    </div>
+                    <div>{item.comment}</div>
+                  </div>
+                  <div>
+                    <Button
+                      onClick={(e) => deleteCommentHandler(item.id, e)}
+                      type="submit"
+                      variant={"ghost"}
+                      size={"sm"}
+                      className="p-1"
+                    >
+                      <Trash2 size={15} />
+                    </Button>
+                  </div>
                 </div>
               ))}
           </div>
