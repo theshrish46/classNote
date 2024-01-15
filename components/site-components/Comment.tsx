@@ -19,7 +19,6 @@ const CommentBox = ({ postId, decodedToken }: CommentPageProps) => {
     e.preventDefault();
     comment(commentText, postId)
       .then((data) => {
-        console.log(data);
         if (data.success) toast.success(data.success);
         if (data.error) toast.error(data.error);
       })

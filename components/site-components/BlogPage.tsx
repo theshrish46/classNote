@@ -106,8 +106,6 @@ const BlogPage = ({ data, comments, user }: BlogPageProps) => {
 
   return (
     <div>
-      <div>{user.id}</div>
-      <div>{data.authorId}</div>
       {user.id == data.authorId ? (
         <div>
           <Editor data={data} key={data.id} />

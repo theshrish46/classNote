@@ -39,7 +39,6 @@ export const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values);
     setError("");
     setSuccess("");
 
