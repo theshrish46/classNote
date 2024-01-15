@@ -19,9 +19,11 @@ interface DataProps {
   content: string;
   authorName: string;
   authorId: string;
-  likes: number;
-  views: number;
+  likes: number | null;
+  views: number | null;
   likedBy: string[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface BlogCardProps {

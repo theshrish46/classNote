@@ -16,29 +16,29 @@ export const NewVerificationForm = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
-  const onSubmit = useCallback(() => {
-    if (success || error) {
-      return;
-    }
+  // const onSubmit = useCallback(() => {
+  //   if (success || error) {
+  //     return;
+  //   }
 
-    if (!token) {
-      setError("Missing Token");
-      return;
-    }
+  //   if (!token) {
+  //     setError("Missing Token");
+  //     return;
+  //   }
 
-    newVerification(token)
-      .then((data) => {
-        setSuccess(data.success);
-        setError(data.error);
-      })
-      .catch(() => {
-        setError("Something went wrong!");
-      });
-  }, [token, success, error]);
+  //   newVerification(token)
+  //     .then((data) => {
+  //       setSuccess(data.success);
+  //       setError(data.error);
+  //     })
+  //     .catch(() => {
+  //       setError("Something went wrong!");
+  //     });
+  // }, [token, success, error]);
 
-  useEffect(() => {
-    onSubmit();
-  }, [onSubmit]);
+  // useEffect(() => {
+  //   onSubmit();
+  // }, [onSubmit]);
 
   return (
     <CardWrapper

@@ -10,8 +10,8 @@ import MobileNav from "./MobileNav";
 import { LogOutButton } from "./log-out-button";
 import { currentClientUser } from "@/hooks/use-client-user";
 
-const Navbar = () => {
-  const user = currentClientUser();
+const Navbar = async () => {
+  const user = await currentClientUser();
   if (!user) {
     console.log("No user presentF");
   }
