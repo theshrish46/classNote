@@ -16,7 +16,7 @@ const CommentBox = ({ postId, decodedToken }: CommentPageProps) => {
   const [commentText, setComment] = useState("");
 
   async function commentHandler(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+    // e.preventDefault();
     comment(commentText, postId)
       .then((data) => {
         if (data.success) toast.success(data.success);

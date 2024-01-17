@@ -170,7 +170,7 @@ const modules = {
     ["bold", "italic", "underline", "strike"],
     [{ color: [] }, { background: [] }],
     [{ script: "sub" }, { script: "super" }],
-    ["blockquote", "code-block"],
+    ["link", "blockquote", "code-block"],
     [{ list: "ordered" }, { list: "bullet" }],
     [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
     ["clean"],

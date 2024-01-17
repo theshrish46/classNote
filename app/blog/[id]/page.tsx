@@ -31,7 +31,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
   if (!comments) {
     return { error: "No comments available" };
   }
-  console.log("type of comments", typeof comments);
   const user = await currentServerUser();
   if (!user) {
     return { error: "Unauthorized" };

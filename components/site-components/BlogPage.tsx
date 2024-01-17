@@ -86,7 +86,7 @@ const BlogPage = ({ data, comments, user }: BlogPageProps) => {
     id: string,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    event.preventDefault();
+    // event.preventDefault();
     deleteComment(id)
       .then((data) => {
         if (data.success) {
