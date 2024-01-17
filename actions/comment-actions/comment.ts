@@ -19,6 +19,10 @@ export const comment = async (comment: string, postId: string) => {
         return { error: "User doesn't exist to comment" }
     }
 
+    if (!comment) {
+        return { error: "Empty comment not allowed" }
+    }
+
     const newComment = await db.comment.create({
         data: {
             comment: comment,
