@@ -10,24 +10,10 @@ import {
   CardTitle,
 } from "../ui/card";
 import ReactHTMLParser from "react-html-parser";
-
-interface DataProps {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  content: string;
-  authorName: string;
-  authorId: string;
-  likes: number | null;
-  views: number | null;
-  likedBy: string[];
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Post } from "@prisma/client";
 
 interface BlogCardProps {
-  data: DataProps;
+  data: Post
 }
 
 const BlogCard = ({ data }: BlogCardProps) => {

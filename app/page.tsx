@@ -15,8 +15,8 @@ export default async function Home() {
     <div>
       <MaxWidthWrapper>
         {post.length > 0 ? (
-          post.map((item, index) => (
-            <div key={index}>
+          post.map((item) => (
+            <div key={item.id}>
               <BlogCard data={item} key={item.id} />
             </div>
           ))
